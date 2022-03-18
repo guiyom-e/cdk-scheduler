@@ -4,3 +4,5 @@ node_modules
 **/*.d.ts
 
 cdk.out
+
+.yarn/cache
