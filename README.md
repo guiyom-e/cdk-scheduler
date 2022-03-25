@@ -9,6 +9,10 @@ The construct defines an interface (`LibProps`) to configure the visibility time
 
 ### Useful commands
 
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
+- `yarn build` compile typescript to js
+- `yarn watch` watch for changes and compile
+- `yarn test` perform the jest unit tests
+
+- `yarn` install
+- `yarn cdk bootstrap` bootstrap cdk
+- `yarn deploy` deploy

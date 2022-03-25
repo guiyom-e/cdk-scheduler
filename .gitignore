@@ -6,3 +6,4 @@ node_modules
 cdk.out
 
 .yarn/cache
+.yarn/install-state.gz
