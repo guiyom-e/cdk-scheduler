@@ -5,6 +5,7 @@ import type { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { AwsIntegration } from 'aws-cdk-lib/aws-apigateway';
 import { Stack } from 'aws-cdk-lib';
+import mapValues from 'lodash/mapValues';
 
 const PUT_ITEM_ACTION = 'PutItem';
 
@@ -12,10 +13,10 @@ type Command = Omit<PutCommandInput, 'TableName'>;
 
 const command: Command = {
   Item: {
-    pk: 'Day',
-    sk: 'SK',
-    name: 'NAME',
-    id: 'ID',
+    pk: 'PK',
+    sk: '$context.requestId',
+    id: "$input.path('$.id')",
+    payload: "$input.json('$.payload')",
   },
 };
 
@@ -30,13 +31,15 @@ export class DynamoDBPutItemIntegration extends AwsIntegration {
     const applicationJSONTemplate = {
       TableName: table.tableName,
       ...command,
-      Item: marshall(command.Item),
+      ...mapValues({ Item: command.Item }, marshall),
+      // Item: marshall(command.Item),
       // ExpressionAttributeValues: marshall(command.ExpressionAttributeValues),
     };
 
     const responseTemplate = JSON.stringify({
       data: {
         id: '$context.requestId',
+        payload: '$input.body',
       },
     });
 
@@ -51,8 +54,8 @@ export class DynamoDBPutItemIntegration extends AwsIntegration {
         },
         integrationResponses: [
           {
-            selectionPattern: '200',
-            statusCode: '201',
+            selectionPattern: '.+',
+            statusCode: '200',
             responseTemplates: {
               'application/json': responseTemplate,
             },
