@@ -1,19 +1,20 @@
 #!/usr/bin/env node
+// eslint-disable-next-line import/no-extraneous-dependencies
 import 'source-map-support/register';
-import { Stack, App } from "aws-cdk-lib";
-import { Lib } from "../lib";
+import { Stack, App } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { Lib } from '../lib';
 
 class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    new Lib(this, 'my-lib')
+    new Lib(this, 'my-lib');
   }
 }
 
 const app = new App();
-new AppStack(app, 'AppStack')
-  
+new AppStack(app, 'AppStack');
+
 //   , {
 //   /* If you don't specify 'env', this stack will be environment-agnostic.
 //    * Account/Region-dependent features and context lookups will not work,
