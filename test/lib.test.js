@@ -62,15 +62,3 @@ test('Lambda created', () => {
     Runtime: 'nodejs14.x',
   });
 });
-
-test('API created', () => {
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'AppStack');
-  // WHEN
-  new Lib(stack, 'my-lib');
-  // THEN
-  const template = Template.fromStack(stack);
-  template.hasResourceProperties('AWS::ApiGateway::RestApi', {
-    Name: 'RestApi',
-  });
-});

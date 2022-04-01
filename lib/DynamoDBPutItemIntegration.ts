@@ -14,7 +14,7 @@ type Command = Omit<PutCommandInput, 'TableName'>;
 const command: Command = {
   Item: {
     pk: "$input.path('$.dateRange')",
-    sk: "$input.path('$.publishDate')-$context.requestId",
+    sk: "$input.path('$.publishDate')#$context.requestId",
     id: "$input.path('$.id')",
     payload: "$input.json('$.payload')",
   },

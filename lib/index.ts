@@ -1,7 +1,7 @@
 import { Construct } from 'constructs';
 import { Duration } from 'aws-cdk-lib';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
-import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { Rule, RuleTargetInput, Schedule } from 'aws-cdk-lib/aws-events';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
@@ -13,7 +13,11 @@ export interface LibProps {
 
 export class Lib extends Construct {
   table: Table;
-  constructor(scope: Construct, id: string, props: LibProps = {}) {
+  constructor(
+    scope: Construct,
+    id: string,
+    // props: LibProps = {}
+  ) {
     super(scope, id);
 
     // Define construct contents here
@@ -30,13 +34,23 @@ export class Lib extends Construct {
     });
 
     const extractHandler = new NodejsFunction(this, 'ExtractHandler', {
-      entry: 'lib/extract.ts',
+      entry: 'lib/extract.js',
       events: [],
     });
 
-    const trigger = new Rule(this, 'ScheduleTrigger', {
+    this.table.grantReadWriteData(extractHandler);
+    queue.grantSendMessages(extractHandler);
+
+    new Rule(this, 'ScheduleTrigger', {
       schedule: Schedule.rate(Duration.minutes(15)),
-      targets: [new LambdaFunction(extractHandler)],
+      targets: [
+        new LambdaFunction(extractHandler, {
+          event: RuleTargetInput.fromObject({
+            tableName: this.table.tableName,
+            queueUrl: queue.queueUrl,
+          }),
+        }),
+      ],
     });
   }
 }
