@@ -1,14 +1,31 @@
-#!/usr/bin/env node
 // eslint-disable-next-line import/no-extraneous-dependencies
 import 'source-map-support/register';
-import { Stack, App } from 'aws-cdk-lib';
+import { App, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Lib } from '../lib';
+import { DynamoDBPutItemIntegration } from '../lib/DynamoDBPutItemIntegration';
 
 class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    new Lib(this, 'my-lib');
+    const lib = new Lib(this, 'my-lib');
+
+    const role = new Role(this, 'Role', {
+      assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
+    });
+
+    lib.table.grantWriteData(role);
+
+    const integration = new DynamoDBPutItemIntegration({
+      table: lib.table,
+      role,
+    });
+
+    const httpApi = new RestApi(this, 'RestApi');
+
+    httpApi.root.addMethod('POST', integration);
   }
 }
 
