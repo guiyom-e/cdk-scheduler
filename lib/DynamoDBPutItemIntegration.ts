@@ -25,6 +25,7 @@ type DynamoDBIntegrationProps = {
   role: Role;
 };
 
+// POC
 export class DynamoDBPutItemIntegration extends AwsIntegration {
   constructor({ table, role: credentialsRole }: DynamoDBIntegrationProps) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
