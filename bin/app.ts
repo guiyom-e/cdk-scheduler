@@ -25,7 +25,7 @@ class AppStack extends Stack {
 
     const integration = new DynamoDBPutItemIntegration({
       table: schedulerLib.schedulerTable,
-      dynamoDbApiIntegrationRole,
+      role: dynamoDbApiIntegrationRole,
     });
 
     const httpApi = new RestApi(this, 'RestApi');
