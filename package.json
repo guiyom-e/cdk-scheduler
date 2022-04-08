@@ -40,9 +40,7 @@
     "@aws-sdk/lib-dynamodb": "^3.56.0",
     "@aws-sdk/util-dynamodb": "^3.56.0",
     "@aws/dynamodb-data-marshaller": "^0.7.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.17.7",
     "aws-sdk": "^2.1105.0",
-    "dayjs": "^1.11.0",
     "lodash": "^4.17.21"
   }
 }

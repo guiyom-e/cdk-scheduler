@@ -11,7 +11,9 @@ import { DynamoDBPutItemIntegration } from '../lib/DynamoDBPutItemIntegration';
 class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    const schedulerLib = new Lib(this, 'scheduler-lib');
+    const schedulerLib = new Lib(this, 'scheduler-lib', {
+      noDuplication: false,
+    });
 
     const dynamoDbApiIntegrationRole = new Role(
       this,

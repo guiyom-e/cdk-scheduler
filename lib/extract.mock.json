@@ -1,0 +1,6 @@
+{
+  "tableName": "AppStack-schedulerlibSchedulerTableF70A566D-DQVVZ1CCLH57",
+  "queueUrl": "https://sqs.eu-west-1.amazonaws.com/569129860443/AppStack-schedulerlibSchedulingQueue87235E70-3EmF75cRUIv4",
+  "cronDelayInMinutes": 14,
+  "partitionKeyValue": "scheduler"
+}

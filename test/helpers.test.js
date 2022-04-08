@@ -1,13 +1,22 @@
-import dayjs from 'dayjs';
-import { extractDelay, extractId, getPKs } from '../lib/helpers';
+import {
+  extractDelay,
+  extractId,
+  getExpressionAttributeValues,
+} from '../lib/helpers';
+
+const nowIso = '2022-04-01T14:45:00.000Z';
+const now = new Date(nowIso).getTime();
+
+const publishDateIso = '2022-04-01T14:55:00.000Z';
+const publishDate = new Date(publishDateIso).getTime();
 
 const events = [
   {
     pk: {
-      S: '2022-04-01',
+      S: 'scheduler',
     },
     sk: {
-      S: '2022-04-01T14:55:00.000Z#4455fee0-ce74-4145-991a-c78c82f31730',
+      S: `${publishDate}#4455fee0-ce74-4145-991a-c78c82f31730`,
     },
     payload: {
       S: '2',
@@ -18,7 +27,7 @@ const events = [
   },
 ];
 
-const now = dayjs('2022-04-01T14:45:00.000Z');
+const defaultCronDelay = 14;
 
 describe('helpers', () => {
   describe('extractDelay', () => {
@@ -37,19 +46,14 @@ describe('helpers', () => {
     });
   });
 
-  describe('getPks', () => {
-    it('should return only one pk', () => {
-      const pk = getPKs(now);
-      expect(pk).toHaveLength(1);
-      expect(pk).toContain('2022-04-01');
-    });
-
-    it('should return two pks if delay is close to midnight', () => {
-      const soonMidnight = dayjs('2022-04-01T23:57:00.000Z');
-      const pks = getPKs(soonMidnight);
-      expect(pks).toHaveLength(2);
-      expect(pks).toContain('2022-04-01');
-      expect(pks).toContain('2022-04-02');
+  describe('getExpressionAttributeValues', () => {
+    it('should return now and now + cronDelay + 1 minutes', () => {
+      const expressionAttributesValue = getExpressionAttributeValues(
+        now,
+        defaultCronDelay,
+      );
+      expect(expressionAttributesValue[':now'].S).toBe('1648824300000');
+      expect(expressionAttributesValue[':future'].S).toBe('1648825200000');
     });
   });
 });

@@ -6,9 +6,19 @@ import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
+export interface LibProps {
+  /** Whether to avoid duplicates in SQS events, that may appear in case of errors.
+   *
+   * @default false
+   * */
+  noDuplication: boolean;
+}
+
 export class Lib extends Construct {
   /** DynamoDB table used to store scheduled events */
   public schedulerTable: Table;
+
+  public partitionKeyValue = 'scheduler';
 
   /** Queue with scheduled events planned to occur in 0 to 15 minutes */
   private schedulingQueue: Queue;
@@ -19,7 +29,11 @@ export class Lib extends Construct {
   /** Delay of the CRON to trigger the extract lambda. Must be an integer between 1 and 14 minutes. */
   private cronDelayInMinutes = 14;
 
-  constructor(scope: Construct, id: string) {
+  constructor(
+    scope: Construct,
+    id: string,
+    { noDuplication = false }: LibProps,
+  ) {
     super(scope, id);
 
     this.schedulerTable = new Table(this, 'SchedulerTable', {
@@ -30,11 +44,13 @@ export class Lib extends Construct {
 
     this.schedulingQueue = new Queue(this, 'SchedulingQueue', {
       visibilityTimeout: Duration.seconds(300),
+      ...(noDuplication ? { fifo: true, contentBasedDeduplication: true } : {}),
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {
       entry: 'lib/extract.js',
       events: [],
+      retryAttempts: 2,
     });
 
     this.schedulerTable.grantReadWriteData(this.extractHandler);
@@ -48,6 +64,7 @@ export class Lib extends Construct {
             tableName: this.schedulerTable.tableName,
             queueUrl: this.schedulingQueue.queueUrl,
             cronDelayInMinutes: this.cronDelayInMinutes,
+            partitionKeyValue: this.partitionKeyValue,
           }),
         }),
       ],
