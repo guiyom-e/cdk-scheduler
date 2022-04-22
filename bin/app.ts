@@ -8,6 +8,8 @@ import {
   RestApi,
 } from 'aws-cdk-lib/aws-apigateway';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
+import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Scheduler } from '../lib';
 import { DynamoDBPutItemIntegration } from './DynamoDBPutItemIntegration';
 
@@ -19,7 +21,7 @@ class AppStack extends Stack {
       noDuplication: false,
     });
 
-    // Integration example with a REST API
+    // Integration example to add a scheduled event with a REST API
     const dynamoDbApiIntegrationRole = new Role(
       this,
       'DynamoDbApiIntegrationRole',
@@ -63,6 +65,17 @@ class AppStack extends Stack {
       },
       // authorizer: new RequestAuthorizer(stack, 'MyAuthorizer', {}),
     });
+
+    // Integration example to listen to a scheduled event with a Lambda function
+    const triggeredLambda = new Function(this, 'TriggeredFunction', {
+      handler: 'index.main',
+      code: Code.fromInline(
+        "exports.main=(event)=>console.log('Scheduled event received!',event);",
+      ),
+      runtime: Runtime.NODEJS_14_X,
+    });
+    const eventSource = new SqsEventSource(schedulerLib.schedulingQueue);
+    triggeredLambda.addEventSource(eventSource);
   }
 }
 

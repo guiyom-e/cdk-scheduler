@@ -27,7 +27,7 @@ export class Scheduler extends Construct {
   public readonly partitionKeyValue = 'scheduler';
 
   /** Queue with scheduled events planned to occur in 0 to 15 minutes */
-  private readonly schedulingQueue: Queue;
+  public readonly schedulingQueue: Queue;
 
   /** Lambda to extract scheduled events from the SchedulerTable and put them in tne SchedulingQueue */
   private readonly extractHandler: NodejsFunction;
