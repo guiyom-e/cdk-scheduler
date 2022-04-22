@@ -1,23 +1,9 @@
+import { Stack } from 'aws-cdk-lib';
+import { AwsIntegration } from 'aws-cdk-lib/aws-apigateway';
 import type { Table } from 'aws-cdk-lib/aws-dynamodb';
 import type { Role } from 'aws-cdk-lib/aws-iam';
-import type { PutCommandInput } from '@aws-sdk/lib-dynamodb';
-
-import { AwsIntegration } from 'aws-cdk-lib/aws-apigateway';
-import { Stack } from 'aws-cdk-lib';
 
 const PUT_ITEM_ACTION = 'PutItem';
-
-type Command = Omit<PutCommandInput, 'TableName'> & {
-  Item: { pk: string; sk: string; id: string };
-};
-
-const command: Command = {
-  Item: {
-    pk: "$input.path('$.dateRange')",
-    sk: "$input.path('$.publishDate')#$context.requestId",
-    id: "$input.path('$.id')",
-  },
-};
 
 type DynamoDBIntegrationProps = {
   partitionKey: string;
@@ -26,23 +12,38 @@ type DynamoDBIntegrationProps = {
 };
 
 export class DynamoDBPutItemIntegration extends AwsIntegration {
-  constructor({ table, role: credentialsRole }: DynamoDBIntegrationProps) {
+  constructor({
+    table,
+    role: credentialsRole,
+    partitionKey,
+  }: DynamoDBIntegrationProps) {
     const applicationJSONTemplate = {
       TableName: table.tableName,
       Item: {
-        pk: { S: command.Item.pk },
-        sk: { S: command.Item.sk },
-        id: { S: command.Item.id },
+        pk: { S: partitionKey },
+        sk: {
+          S: "$input.path('$.publicationTimestamp')#$input.path('$.id')#$context.requestId",
+        },
+        id: { S: "$input.path('$.id')#$context.requestId" },
+        payload: {
+          M: {
+            message: {
+              S: 'Custom payload not implemented',
+            },
+          },
+        },
       },
     };
 
-    const responseTemplate = JSON.stringify({
+    const responseTemplate = {
+      statusCode: '200',
+      status: 200,
       data: {
-        id: '$context.requestId',
-        publicationDate: "$input.path('$.publishDate')",
-        payload: { message: 'Custom payload is not implemented' },
+        id: "$input.path('$.id')#$context.requestId",
+        publicationTimestamp: "$input.path('$.publicationTimestamp')",
+        payload: { message: 'Custom payload not implemented' },
       },
-    });
+    };
 
     super({
       action: PUT_ITEM_ACTION,
@@ -55,10 +56,9 @@ export class DynamoDBPutItemIntegration extends AwsIntegration {
         },
         integrationResponses: [
           {
-            selectionPattern: '.+',
             statusCode: '200',
             responseTemplates: {
-              'application/json': responseTemplate,
+              'application/json': JSON.stringify(responseTemplate),
             },
           },
         ],
