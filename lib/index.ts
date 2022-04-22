@@ -9,6 +9,10 @@ import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 export const CRON_DELAY_IN_MINUTES = 14;
 export interface LibProps {
   /** Whether to avoid duplicates in SQS events, that may appear in case of errors.
+   * It is not recommended to deactivate this option, unless the receiver is idempotent.
+   *
+   * When noDuplication option is activated, a FIFO SQS is provisioned.
+   * When noDuplication option is activated, a standard SQS is provisioned, which is cheaper than a FIFO queue.
    *
    * @default true
    * */
@@ -17,18 +21,19 @@ export interface LibProps {
 
 export class Lib extends Construct {
   /** DynamoDB table used to store scheduled events */
-  public schedulerTable: Table;
+  public readonly schedulerTable: Table;
 
-  public partitionKeyValue = 'scheduler';
+  /** Value of the DynamoDB partition key, used to store pending events */
+  public readonly partitionKeyValue = 'scheduler';
 
   /** Queue with scheduled events planned to occur in 0 to 15 minutes */
-  private schedulingQueue: Queue;
+  private readonly schedulingQueue: Queue;
 
   /** Lambda to extract scheduled events from the SchedulerTable and put them in tne SchedulingQueue */
-  private extractHandler: NodejsFunction;
+  private readonly extractHandler: NodejsFunction;
 
   /** Delay of the CRON to trigger the extract lambda. Must be an integer between 1 and 14 minutes. */
-  private cronDelayInMinutes = CRON_DELAY_IN_MINUTES;
+  private readonly cronDelayInMinutes = CRON_DELAY_IN_MINUTES;
 
   constructor(
     scope: Construct,
