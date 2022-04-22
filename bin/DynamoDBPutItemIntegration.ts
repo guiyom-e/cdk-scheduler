@@ -2,45 +2,45 @@ import type { Table } from 'aws-cdk-lib/aws-dynamodb';
 import type { Role } from 'aws-cdk-lib/aws-iam';
 import type { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 
-import { marshall } from '@aws-sdk/util-dynamodb';
 import { AwsIntegration } from 'aws-cdk-lib/aws-apigateway';
 import { Stack } from 'aws-cdk-lib';
-import mapValues from 'lodash/mapValues';
 
 const PUT_ITEM_ACTION = 'PutItem';
 
-type Command = Omit<PutCommandInput, 'TableName'>;
+type Command = Omit<PutCommandInput, 'TableName'> & {
+  Item: { pk: string; sk: string; id: string };
+};
 
 const command: Command = {
   Item: {
     pk: "$input.path('$.dateRange')",
     sk: "$input.path('$.publishDate')#$context.requestId",
     id: "$input.path('$.id')",
-    payload: "$input.json('$.payload')",
   },
 };
 
 type DynamoDBIntegrationProps = {
+  partitionKey: string;
   table: Table;
   role: Role;
 };
 
-// POC
 export class DynamoDBPutItemIntegration extends AwsIntegration {
   constructor({ table, role: credentialsRole }: DynamoDBIntegrationProps) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const applicationJSONTemplate = {
       TableName: table.tableName,
-      ...command,
-      ...mapValues({ Item: command.Item }, marshall),
-      // Item: marshall(command.Item),
-      // ExpressionAttributeValues: marshall(command.ExpressionAttributeValues),
+      Item: {
+        pk: { S: command.Item.pk },
+        sk: { S: command.Item.sk },
+        id: { S: command.Item.id },
+      },
     };
 
     const responseTemplate = JSON.stringify({
       data: {
         id: '$context.requestId',
-        payload: '$input.body',
+        publicationDate: "$input.path('$.publishDate')",
+        payload: { message: 'Custom payload is not implemented' },
       },
     });
 
