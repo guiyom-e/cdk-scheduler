@@ -1,6 +1,6 @@
 {
   "name": "ts-serverless-scheduler",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "license": "MIT",
   "main": "build/lib/index.js",
   "types": "build/lib/index.d.ts",
