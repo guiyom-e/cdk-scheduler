@@ -42,5 +42,8 @@
     "@aws/dynamodb-data-marshaller": "^0.7.3",
     "aws-sdk": "^2.1105.0",
     "lodash": "^4.17.21"
+  },
+  "engines": {
+    "node": "14.18.2"
   }
 }
