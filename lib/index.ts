@@ -9,9 +9,9 @@ import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 export interface LibProps {
   /** Whether to avoid duplicates in SQS events, that may appear in case of errors.
    *
-   * @default false
+   * @default true
    * */
-  noDuplication: boolean;
+  noDuplication?: boolean;
 }
 
 export class Lib extends Construct {
@@ -32,7 +32,7 @@ export class Lib extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { noDuplication = false }: LibProps,
+    { noDuplication = true }: LibProps = { noDuplication: true },
   ) {
     super(scope, id);
 
