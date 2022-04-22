@@ -1,18 +1,21 @@
 # ts-serverless-scheduler
 
-## Welcome to your CDK TypeScript Construct Library project
+A CDK construct to schedule events precisely ⏱
 
-You should explore the contents of this project. It demonstrates a CDK Construct Library that includes a construct (`Lib`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
+This construct enables you to trigger an event at a given time on a serverless architecture.
 
-The construct defines an interface (`LibProps`) to configure the visibility timeout of the queue.
+You should use ts-serverless-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application.
 
-### Useful commands
+## Install
 
-- `yarn build` compile typescript to js
-- `yarn watch` watch for changes and compile
-- `yarn test` perform the jest unit tests
+To install with npm:
 
-- `yarn` install
-- `yarn cdk bootstrap` bootstrap cdk
-- `yarn deploy` deploy
+```
+npm install ts-serverless-scheduler
+```
+
+To install with yarn:
+
+```
+yarn add ts-serverless-scheduler
+```
