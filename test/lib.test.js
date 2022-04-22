@@ -73,6 +73,8 @@ test('Lambda and trigger created', () => {
     Runtime: 'nodejs14.x',
   });
 
+  expect(CRON_DELAY_IN_MINUTES).toBeGreaterThan(0);
+  expect(CRON_DELAY_IN_MINUTES).toBeLessThanOrEqual(14);
   template.hasResourceProperties('AWS::Events::Rule', {
     ScheduleExpression: `rate(${CRON_DELAY_IN_MINUTES} minutes)`,
     State: 'ENABLED',
