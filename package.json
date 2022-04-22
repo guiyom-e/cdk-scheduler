@@ -4,7 +4,7 @@
   "main": "build/lib/index.js",
   "types": "build/lib/index.d.ts",
   "scripts": {
-    "build": "rm -rf build && tsc",
+    "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "deploy": "cdk deploy"
