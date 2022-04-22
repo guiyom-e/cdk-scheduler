@@ -1,8 +1,8 @@
 {
-  "name": "lib",
+  "name": "ts-serverless-scheduler",
   "version": "0.1.0",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "build/lib/index.js",
+  "types": "build/lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
