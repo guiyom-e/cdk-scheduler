@@ -4,14 +4,14 @@ import { App, Stack } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
-import { Lib } from '../lib';
+import { Scheduler } from '../lib';
 import { DynamoDBPutItemIntegration } from '../lib/DynamoDBPutItemIntegration';
 
 /** Integration of the scheduling library */
 class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    const schedulerLib = new Lib(this, 'scheduler-lib', {
+    const schedulerLib = new Scheduler(this, 'scheduler-lib', {
       noDuplication: false,
     });
 

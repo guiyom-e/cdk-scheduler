@@ -1,8 +1,8 @@
 node_modules
 
-**/*.d.ts
-
 cdk.out
 
 .yarn/cache
 .yarn/install-state.gz
+
+build
