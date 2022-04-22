@@ -14,7 +14,7 @@ export interface LibProps {
   noDuplication: boolean;
 }
 
-export class Lib extends Construct {
+export class Scheduler extends Construct {
   /** DynamoDB table used to store scheduled events */
   public schedulerTable: Table;
 
