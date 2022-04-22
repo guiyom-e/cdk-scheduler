@@ -52,15 +52,6 @@ class AppStack extends Stack {
       },
     });
 
-    // const requestValidator = restApi.addRequestValidator(
-    //   'RestApiRequestValidator',
-    //   {
-    //     requestValidatorName: 'RestApiRequestValidator',
-    //     validateRequestBody: true,
-    //     validateRequestParameters: true,
-    //   },
-    // );
-
     restApi.root.addMethod('POST', integration, {
       methodResponses: [{ statusCode: '200' }],
       requestModels: {
