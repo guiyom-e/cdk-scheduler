@@ -20,5 +20,5 @@
     "strictNullChecks": true,
     "outDir": "build"
   },
-  "exclude": ["node_modules", "cdk.out"]
+  "exclude": ["node_modules", "cdk.out", "build"]
 }
