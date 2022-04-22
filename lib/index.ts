@@ -6,6 +6,7 @@ import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
+export const CRON_DELAY_IN_MINUTES = 14;
 export interface LibProps {
   /** Whether to avoid duplicates in SQS events, that may appear in case of errors.
    *
@@ -27,7 +28,7 @@ export class Lib extends Construct {
   private extractHandler: NodejsFunction;
 
   /** Delay of the CRON to trigger the extract lambda. Must be an integer between 1 and 14 minutes. */
-  private cronDelayInMinutes = 14;
+  private cronDelayInMinutes = CRON_DELAY_IN_MINUTES;
 
   constructor(
     scope: Construct,
