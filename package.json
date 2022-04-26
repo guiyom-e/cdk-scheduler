@@ -1,6 +1,6 @@
 {
-  "name": "ts-serverless-scheduler",
-  "version": "0.1.2",
+  "name": "cdk-scheduler",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "build/lib/index.js",
   "types": "build/lib/index.d.ts",

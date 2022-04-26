@@ -4,7 +4,7 @@
 
 This construct enables you to trigger an event at a given time on a serverless architecture.
 
-You should use ts-serverless-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application.
+You should use cdk-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application.
 
 ## Install
 
@@ -30,8 +30,8 @@ yarn add cdk-scheduler
 
 You can check out the full implementation example in [app.ts](./bin/app.ts).
 
-```[ts]
-import { Scheduler } from 'ts-serverless-scheduler';
+```ts
+import { Scheduler } from 'cdk-scheduler';
 
 class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
