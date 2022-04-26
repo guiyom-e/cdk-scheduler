@@ -1,7 +1,30 @@
 {
   "name": "cdk-scheduler",
-  "version": "0.1.0",
+  "description": "Precise-to-the-second CDK construct to schedule events",
+  "version": "0.1.1",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/guiyom-e/cdk-scheduler",
+    "type": "git"
+  },
+  "keywords": [
+    "cdk",
+    "aws",
+    "serverless",
+    "lambda",
+    "sqs",
+    "dynamodb",
+    "precise-to-the-second",
+    "scheduling"
+  ],
+  "maintainers": [
+    {
+      "name": "Adèle Gauvrit"
+    },
+    {
+      "name": "Guillaume Égée"
+    }
+  ],
   "main": "build/lib/index.js",
   "types": "build/lib/index.d.ts",
   "files": [
