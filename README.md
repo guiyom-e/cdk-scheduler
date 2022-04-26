@@ -1,4 +1,4 @@
-# ts-serverless-scheduler
+# cdk-scheduler
 
 > A CDK construct to schedule events precisely ⏱
 
@@ -11,18 +11,18 @@ You should use ts-serverless-scheduler if you need to trigger an event at a prec
 To install with npm:
 
 ```
-npm install ts-serverless-scheduler
+npm install cdk-scheduler
 ```
 
 To install with yarn:
 
 ```
-yarn add ts-serverless-scheduler
+yarn add cdk-scheduler
 ```
 
 ## Usage
 
-`ts-serverless-scheduler` is powered by SQS feature to delay events up to 15 minutes. A lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.
+`cdk-scheduler` is powered by SQS feature to delay events up to 15 minutes. A lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.
 
 ![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](./docs/images/Architecture%20Scheduler.jpg)
 
@@ -38,9 +38,7 @@ class AppStack extends Stack {
     super(scope, id);
 
     // Create Scheduler Construct
-    const schedulerLib = new Scheduler(this, 'scheduler-lib', {
-      noDuplication: false,
-    });
+    const schedulerLib = new Scheduler(this, 'scheduler-lib');
 
     // Grant writing role to Dynamo DB to your service that will
     const dynamoDbApiIntegrationRole = new Role(
@@ -82,7 +80,7 @@ const app = new App();
 new AppStack(app, 'AppStack');
 ```
 
-For the scheduler to function properly the elements added to Dynamo DB must have the following attributes:
+For the scheduler to function properly the elements added to DynamoDB must have the following attributes:
 
 | Attribute | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                  |
 | --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
