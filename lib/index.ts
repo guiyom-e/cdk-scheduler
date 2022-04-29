@@ -11,7 +11,9 @@ import {
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
+// Must be an integer between 1 and 14 minutes
 export const CRON_DELAY_IN_MINUTES = 14;
+
 export interface LibProps {
   /** Whether to allow duplicates in SQS events, that may appear in case of errors.
    * It is not recommended to activate this option, unless the receiver is idempotent.
