@@ -18,7 +18,7 @@ test('SQS Queue Created', () => {
 test('SQS Queue Created without deduplication', () => {
   const app = new cdk.App();
   const stack = new cdk.Stack(app, 'AppStack');
-  new Scheduler(stack, 'my-lib', { noDuplication: false });
+  new Scheduler(stack, 'my-lib', { allowDuplication: true });
   const template = Template.fromStack(stack);
 
   template.hasResourceProperties('AWS::SQS::Queue', {

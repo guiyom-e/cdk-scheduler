@@ -8,15 +8,15 @@ import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
 export const CRON_DELAY_IN_MINUTES = 14;
 export interface LibProps {
-  /** Whether to avoid duplicates in SQS events, that may appear in case of errors.
-   * It is not recommended to deactivate this option, unless the receiver is idempotent.
+  /** Whether to allow duplicates in SQS events, that may appear in case of errors.
+   * It is not recommended to activate this option, unless the receiver is idempotent.
    *
-   * When noDuplication option is activated, a FIFO SQS is provisioned.
-   * When noDuplication option is activated, a standard SQS is provisioned, which is cheaper than a FIFO queue.
+   * When `allowDuplication` option is deactivated (default), a FIFO SQS is provisioned.
+   * When `allowDuplication` option is activated, a standard SQS is provisioned, which is cheaper than a FIFO queue.
    *
-   * @default true
+   * @default false
    * */
-  noDuplication?: boolean;
+  allowDuplication?: boolean;
 }
 
 export class Scheduler extends Construct {
@@ -38,7 +38,7 @@ export class Scheduler extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { noDuplication = true }: LibProps = { noDuplication: true },
+    { allowDuplication = false }: LibProps = { allowDuplication: false },
   ) {
     super(scope, id);
 
@@ -50,7 +50,9 @@ export class Scheduler extends Construct {
 
     this.schedulingQueue = new Queue(this, 'SchedulingQueue', {
       visibilityTimeout: Duration.seconds(300),
-      ...(noDuplication ? { fifo: true, contentBasedDeduplication: true } : {}),
+      ...(allowDuplication
+        ? {}
+        : { fifo: true, contentBasedDeduplication: true }),
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {

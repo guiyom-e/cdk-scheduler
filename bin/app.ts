@@ -18,7 +18,7 @@ class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     const schedulerLib = new Scheduler(this, 'scheduler-lib', {
-      noDuplication: false,
+      allowDuplication: false,
     });
 
     // Integration example to add a scheduled event with a REST API
