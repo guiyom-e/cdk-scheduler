@@ -28,7 +28,7 @@ export class DynamoDBPutItemIntegration extends AwsIntegration {
         payload: {
           M: {
             message: {
-              S: 'Custom payload not implemented',
+              S: "$input.path('$.message')",
             },
           },
         },
@@ -41,7 +41,7 @@ export class DynamoDBPutItemIntegration extends AwsIntegration {
       data: {
         id: "$input.path('$.id')#$context.requestId",
         publicationTimestamp: "$input.path('$.publicationTimestamp')",
-        payload: { message: 'Custom payload not implemented' },
+        payload: { message: "$input.path('$.message')" },
       },
     };
 

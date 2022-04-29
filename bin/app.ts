@@ -47,9 +47,9 @@ class AppStack extends Stack {
         properties: {
           publicationTimestamp: { type: JsonSchemaType.NUMBER },
           id: { type: JsonSchemaType.STRING },
-          payload: { type: JsonSchemaType.OBJECT },
+          message: { type: JsonSchemaType.STRING },
         },
-        required: ['publicationTimestamp'],
+        required: ['publicationTimestamp', 'message', 'id'],
         additionalProperties: false,
       },
     });
@@ -70,7 +70,7 @@ class AppStack extends Stack {
     const triggeredLambda = new Function(this, 'TriggeredFunction', {
       handler: 'index.main',
       code: Code.fromInline(
-        "exports.main=(event)=>console.log('Scheduled event received!',event);",
+        "exports.main=(event)=>console.log('Scheduled event received!',event.payload.message);",
       ),
       runtime: Runtime.NODEJS_14_X,
     });
