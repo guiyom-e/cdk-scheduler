@@ -88,9 +88,13 @@ export class Scheduler extends Construct {
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {
-      entry: 'lib/extract.js',
+      entry: 'build/lib/extract.js',
       events: [],
       retryAttempts: 2,
+      environment: {
+        TABLE_NAME: this.schedulerTable.tableName,
+        QUEUE_URL: this.schedulingQueue.queueUrl,
+      },
     });
 
     this.schedulerTable.grantReadWriteData(this.extractHandler);
@@ -98,8 +102,12 @@ export class Scheduler extends Construct {
 
     if (!disableNearFutureScheduling) {
       this.nearFutureHandler = new NodejsFunction(this, 'NearFutureHandler', {
-        entry: 'lib/handleNearFuture.js',
+        entry: 'build/lib/handleNearFuture.js',
         retryAttempts: 2,
+        environment: {
+          TABLE_NAME: this.schedulerTable.tableName,
+          QUEUE_URL: this.schedulingQueue.queueUrl,
+        },
       });
 
       this.nearFutureHandler.addEventSource(
