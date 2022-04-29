@@ -36,7 +36,7 @@ class AppStack extends Stack {
       role: dynamoDbApiIntegrationRole,
     });
 
-    const restApi = new RestApi(this, 'RestApi');
+    const restApi = new RestApi(this, 'SchedulerRestApi');
 
     const addScheduledEventModel = restApi.addModel('AddScheduledEventModel', {
       contentType: 'application/json',
@@ -80,4 +80,4 @@ class AppStack extends Stack {
 }
 
 const app = new App();
-new AppStack(app, 'AppStack');
+new AppStack(app, 'SchedulerDemo');
