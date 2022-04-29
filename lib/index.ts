@@ -2,7 +2,12 @@ import { Construct } from 'constructs';
 import { Duration } from 'aws-cdk-lib';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Rule, RuleTargetInput, Schedule } from 'aws-cdk-lib/aws-events';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import {
+  AttributeType,
+  BillingMode,
+  StreamViewType,
+  Table,
+} from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 
@@ -17,6 +22,14 @@ export interface LibProps {
    * @default false
    * */
   allowDuplication?: boolean;
+  /** Whether to disable scheduling in the near future, i.e. within the next `CRON_DELAY_IN_MINUTES` minutes (14 minutes by default).
+   * It is not recommended to activate this option, unless no event will be scheduled in the near future.
+   *
+   * When `disableNearFutureScheduling` option is activated, events scheduled within less than `CRON_DELAY_IN_MINUTES` minutes
+   * before due date are not guaranteed to be scheduled properly.
+   *
+   */
+  disableNearFutureScheduling?: boolean;
 }
 
 export class Scheduler extends Construct {
@@ -38,7 +51,13 @@ export class Scheduler extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { allowDuplication = false }: LibProps = { allowDuplication: false },
+    {
+      allowDuplication = false,
+      disableNearFutureScheduling = false,
+    }: LibProps = {
+      allowDuplication: false,
+      disableNearFutureScheduling: false,
+    },
   ) {
     super(scope, id);
 
@@ -46,6 +65,9 @@ export class Scheduler extends Construct {
       partitionKey: { name: 'pk', type: AttributeType.STRING },
       sortKey: { name: 'sk', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
+      stream: disableNearFutureScheduling
+        ? undefined
+        : StreamViewType.NEW_IMAGE,
     });
 
     this.schedulingQueue = new Queue(this, 'SchedulingQueue', {
@@ -63,6 +85,10 @@ export class Scheduler extends Construct {
 
     this.schedulerTable.grantReadWriteData(this.extractHandler);
     this.schedulingQueue.grantSendMessages(this.extractHandler);
+
+    if (!disableNearFutureScheduling) {
+      this.schedulerTable.grantStreamRead(this.extractHandler);
+    }
 
     new Rule(this, 'ScheduleTrigger', {
       schedule: Schedule.rate(Duration.minutes(this.cronDelayInMinutes)),

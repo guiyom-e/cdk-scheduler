@@ -31,7 +31,7 @@ test('SQS Queue Created without deduplication', () => {
   ).toThrow();
 });
 
-test('DynamoDB created', () => {
+test('DynamoDB created with stream', () => {
   const app = new cdk.App();
   const stack = new cdk.Stack(app, 'AppStack');
   new Scheduler(stack, 'my-lib');
@@ -59,7 +59,48 @@ test('DynamoDB created', () => {
       },
     ],
     BillingMode: 'PAY_PER_REQUEST',
+    StreamSpecification: {
+      StreamViewType: 'NEW_IMAGE',
+    },
   });
+});
+
+test('DynamoDB created without stream', () => {
+  const app = new cdk.App();
+  const stack = new cdk.Stack(app, 'AppStack');
+  new Scheduler(stack, 'my-lib', { disableNearFutureScheduling: true });
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::DynamoDB::Table', {
+    KeySchema: [
+      {
+        AttributeName: 'pk',
+        KeyType: 'HASH',
+      },
+      {
+        AttributeName: 'sk',
+        KeyType: 'RANGE',
+      },
+    ],
+    AttributeDefinitions: [
+      {
+        AttributeName: 'pk',
+        AttributeType: 'S',
+      },
+      {
+        AttributeName: 'sk',
+        AttributeType: 'S',
+      },
+    ],
+    BillingMode: 'PAY_PER_REQUEST',
+  });
+  expect(() =>
+    template.hasResourceProperties('AWS::DynamoDB::Table', {
+      StreamSpecification: {
+        StreamViewType: 'NEW_IMAGE',
+      },
+    }),
+  ).toThrow();
 });
 
 test('Lambda and trigger created', () => {
