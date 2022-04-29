@@ -10,6 +10,8 @@ import {
 } from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
 
 // Must be an integer between 1 and 14 minutes
 export const CRON_DELAY_IN_MINUTES = 14;
@@ -44,8 +46,14 @@ export class Scheduler extends Construct {
   /** Queue with scheduled events planned to occur in 0 to 15 minutes */
   public readonly schedulingQueue: Queue;
 
-  /** Lambda to extract scheduled events from the SchedulerTable and put them in tne SchedulingQueue */
+  /** Lambda to extract scheduled events from the `schedulerTable` and put them in the `schedulingQueue` */
   private readonly extractHandler: NodejsFunction;
+
+  /** Lambda to handle scheduled events in the near future (< cronDelayInMinutes) and put them in tne SchedulingQueue
+   *
+   * This resource is not provisioned if `disableNearFutureScheduling` option is false.
+   */
+  private readonly nearFutureHandler: NodejsFunction | undefined;
 
   /** Delay of the CRON to trigger the extract lambda. Must be an integer between 1 and 14 minutes. */
   private readonly cronDelayInMinutes = CRON_DELAY_IN_MINUTES;
@@ -89,7 +97,16 @@ export class Scheduler extends Construct {
     this.schedulingQueue.grantSendMessages(this.extractHandler);
 
     if (!disableNearFutureScheduling) {
-      this.schedulerTable.grantStreamRead(this.extractHandler);
+      this.nearFutureHandler = new NodejsFunction(this, 'NearFutureHandler', {
+        entry: 'lib/handleNearFuture.js',
+        retryAttempts: 2,
+      });
+
+      this.nearFutureHandler.addEventSource(
+        new DynamoEventSource(this.schedulerTable, {
+          startingPosition: StartingPosition.LATEST,
+        }),
+      );
     }
 
     new Rule(this, 'ScheduleTrigger', {
