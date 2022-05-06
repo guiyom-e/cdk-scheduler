@@ -5,18 +5,18 @@ name: Node.js Tests CI
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 14
-      uses: actions/setup-node@v3
-      with:
-        node-version: 14.18.2
-        cache: 'yarn'
-    - run: yarn test
+      - uses: actions/checkout@v3
+      - name: Use Node.js 14
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.18.2
+          cache: 'yarn'
+      - run: yarn install
+      - run: yarn test

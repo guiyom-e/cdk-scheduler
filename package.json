@@ -33,7 +33,10 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "jest",
+    "test-lint": "eslint",
+    "test-type": "tsc --noEmit",
+    "test-unit": "jest",
+    "test": "yarn test-lint && yarn test-type && yarn test-unit",
     "deploy": "cdk deploy"
   },
   "devDependencies": {
