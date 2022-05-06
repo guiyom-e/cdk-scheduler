@@ -2,7 +2,7 @@ import {
   extractDelay,
   extractId,
   getExpressionAttributeValues,
-} from '../lib/helpers';
+} from '../lib/functions/helpers';
 
 const nowIso = '2022-04-01T14:45:00.000Z';
 const now = new Date(nowIso).getTime();

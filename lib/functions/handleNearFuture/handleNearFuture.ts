@@ -1,8 +1,8 @@
 import { DynamoDBStreams } from 'aws-sdk';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { CRON_DELAY_IN_MINUTES } from 'lib/index';
-import { extractDelay, getNow } from 'lib/helpers';
-import { sendEventsToSQSAndDeleteRecords } from 'lib/sendEventsToSQSAndDeleteRecords';
+import { extractDelay, getNow } from 'lib/functions/helpers';
+import { sendEventsToSQSAndDeleteRecords } from 'lib/functions/sendEventsToSQSAndDeleteRecords';
 import { SchedulerDynamoDBRecord } from 'lib/types';
 
 const isValidRecord = (record: unknown): record is SchedulerDynamoDBRecord =>

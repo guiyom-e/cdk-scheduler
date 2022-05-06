@@ -1,4 +1,4 @@
-import { SchedulerDynamoDBRecord } from './types';
+import { SchedulerDynamoDBRecord } from '../types';
 
 export const getNow = (): number => Date.now();
 
