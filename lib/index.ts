@@ -88,7 +88,7 @@ export class Scheduler extends Construct {
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {
-      entry: 'lib/extract.ts',
+      entry: `${__dirname}/functions/extract/extract.ts`,
       events: [],
       retryAttempts: 2,
       environment: {
@@ -102,7 +102,7 @@ export class Scheduler extends Construct {
 
     if (!disableNearFutureScheduling) {
       this.nearFutureHandler = new NodejsFunction(this, 'NearFutureHandler', {
-        entry: 'lib/handleNearFuture.ts',
+        entry: `${__dirname}/functions/handleNearFuture/handleNearFuture.ts`,
         retryAttempts: 2,
         environment: {
           TABLE_NAME: this.schedulerTable.tableName,
