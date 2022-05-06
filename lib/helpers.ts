@@ -9,21 +9,21 @@ export const extractDelay = (
 ): number => {
   const sk = record.sk;
 
-  try {
-    const publishTimestamp = parseInt(sk.S.split('#')[0]);
+  const publishTimestamp = parseInt(sk.S.split('#')[0]);
 
-    return Math.max(0, Math.floor((publishTimestamp - now) / 1000));
-  } catch (e) {
+  if (isNaN(publishTimestamp)) {
     throw new Error('Delay could not be parse');
   }
+
+  return Math.max(0, Math.floor((publishTimestamp - now) / 1000));
 };
 
 export const extractId = (record: SchedulerDynamoDBRecord): string => {
-  try {
-    return record.sk.S.split('#')[1];
-  } catch (e) {
-    throw new Error('Could not parse id');
+  const match = record.sk.S.match(/^\d+?#(.+)$/);
+  if (match !== null && match.length >= 2) {
+    return match[1];
   }
+  throw new Error('Could not parse id');
 };
 
 export const buildSk = (delay: number, id: string): string => `${delay}#${id}`;

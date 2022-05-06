@@ -36,6 +36,16 @@ describe('helpers', () => {
 
       expect(delayInMinutes).toEqual(10);
     });
+    it('should return 0 if the delay is negative', () => {
+      const delayInMinutes = extractDelay({ sk: { S: '0#def#ghi' } }, now) / 60;
+
+      expect(delayInMinutes).toEqual(0);
+    });
+    it('should throw an error if the publication timestamp can not be parsed', () => {
+      expect(() => extractDelay({ sk: { S: 'abc#def#ghi' } }, now)).toThrow(
+        'Delay could not be parse',
+      );
+    });
   });
 
   describe('extractId', () => {
@@ -43,6 +53,26 @@ describe('helpers', () => {
       const id = extractId(events[0]);
 
       expect(id).toEqual('4455fee0-ce74-4145-991a-c78c82f31730');
+    });
+    it('should extract an id with multiple separators from event', () => {
+      const id = extractId({ pk: { S: '' }, sk: { S: '123#def#ghi' } });
+
+      expect(id).toEqual('def#ghi');
+    });
+    it('should throw an error if the event has an empty id', () => {
+      expect(() => extractId({ pk: { S: '' }, sk: { S: '' } })).toThrow(
+        'Could not parse id',
+      );
+    });
+    it('should throw an error if the event has an empty publication date', () => {
+      expect(() => extractId({ pk: { S: '' }, sk: { S: '#def#ghi' } })).toThrow(
+        'Could not parse id',
+      );
+    });
+    it('should throw an error if the event is not correctly formatted', () => {
+      expect(() =>
+        extractId({ pk: { S: '' }, sk: { S: 'abc#def#ghi' } }),
+      ).toThrow('Could not parse id');
     });
   });
 
