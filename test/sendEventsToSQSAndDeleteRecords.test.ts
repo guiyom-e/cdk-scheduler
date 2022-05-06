@@ -1,6 +1,6 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { SQS } from 'aws-sdk';
-import { sendEventsToSQSAndDeleteRecords } from '../lib/sendEventsToSQSAndDeleteRecords';
+import { sendEventsToSQSAndDeleteRecords } from '../lib/functions/sendEventsToSQSAndDeleteRecords';
 
 jest.mock('aws-sdk');
 jest.mock('@aws-sdk/client-dynamodb');
