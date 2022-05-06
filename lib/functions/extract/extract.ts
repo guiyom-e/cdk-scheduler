@@ -1,8 +1,8 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
-import { getExpressionAttributeValues, getNow } from './helpers';
-import { sendEventsToSQSAndDeleteRecords } from './sendEventsToSQSAndDeleteRecords';
-import { SchedulerDynamoDBRecord } from './types';
+import { getExpressionAttributeValues, getNow } from 'lib/functions/helpers';
+import { sendEventsToSQSAndDeleteRecords } from 'lib/functions/sendEventsToSQSAndDeleteRecords';
+import { SchedulerDynamoDBRecord } from 'lib/types';
 
 interface HandlerConfig {
   tableName: string;

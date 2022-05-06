@@ -6,3 +6,4 @@ cdk.out
 .yarn/install-state.gz
 
 build
+tmp

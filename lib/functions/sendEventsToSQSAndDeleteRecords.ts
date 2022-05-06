@@ -2,7 +2,7 @@ import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { SQS } from 'aws-sdk';
 
 import { extractDelay, extractId, getNow } from './helpers';
-import { SchedulerDynamoDBRecord } from './types';
+import { SchedulerDynamoDBRecord } from '../types';
 
 const SQS_BATCH_SIZE = 10;
 
