@@ -2,21 +2,38 @@ import { Construct } from 'constructs';
 import { Duration } from 'aws-cdk-lib';
 import { Queue } from 'aws-cdk-lib/aws-sqs';
 import { Rule, RuleTargetInput, Schedule } from 'aws-cdk-lib/aws-events';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import {
+  AttributeType,
+  BillingMode,
+  StreamViewType,
+  Table,
+} from 'aws-cdk-lib/aws-dynamodb';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
+import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
 
+// Must be an integer between 1 and 14 minutes
 export const CRON_DELAY_IN_MINUTES = 14;
+
 export interface LibProps {
-  /** Whether to avoid duplicates in SQS events, that may appear in case of errors.
-   * It is not recommended to deactivate this option, unless the receiver is idempotent.
+  /** Whether to allow duplicates in SQS events, that may appear in case of errors.
+   * It is not recommended to activate this option, unless the receiver is idempotent.
    *
-   * When noDuplication option is activated, a FIFO SQS is provisioned.
-   * When noDuplication option is activated, a standard SQS is provisioned, which is cheaper than a FIFO queue.
+   * When `allowDuplication` option is deactivated (default), a FIFO SQS is provisioned.
+   * When `allowDuplication` option is activated, a standard SQS is provisioned, which is cheaper than a FIFO queue.
    *
-   * @default true
+   * @default false
    * */
-  noDuplication?: boolean;
+  allowDuplication?: boolean;
+  /** Whether to disable scheduling in the near future, i.e. within the next `CRON_DELAY_IN_MINUTES` minutes (14 minutes by default).
+   * It is not recommended to activate this option, unless no event will be scheduled in the near future.
+   *
+   * When `disableNearFutureScheduling` option is activated, events scheduled within less than `CRON_DELAY_IN_MINUTES` minutes
+   * before due date are not guaranteed to be scheduled properly.
+   *
+   */
+  disableNearFutureScheduling?: boolean;
 }
 
 export class Scheduler extends Construct {
@@ -29,8 +46,14 @@ export class Scheduler extends Construct {
   /** Queue with scheduled events planned to occur in 0 to 15 minutes */
   public readonly schedulingQueue: Queue;
 
-  /** Lambda to extract scheduled events from the SchedulerTable and put them in tne SchedulingQueue */
+  /** Lambda to extract scheduled events from the `schedulerTable` and put them in the `schedulingQueue` */
   private readonly extractHandler: NodejsFunction;
+
+  /** Lambda to handle scheduled events in the near future (< cronDelayInMinutes) and put them in tne SchedulingQueue
+   *
+   * This resource is not provisioned if `disableNearFutureScheduling` option is false.
+   */
+  private readonly nearFutureHandler: NodejsFunction | undefined;
 
   /** Delay of the CRON to trigger the extract lambda. Must be an integer between 1 and 14 minutes. */
   private readonly cronDelayInMinutes = CRON_DELAY_IN_MINUTES;
@@ -38,7 +61,13 @@ export class Scheduler extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { noDuplication = true }: LibProps = { noDuplication: true },
+    {
+      allowDuplication = false,
+      disableNearFutureScheduling = false,
+    }: LibProps = {
+      allowDuplication: false,
+      disableNearFutureScheduling: false,
+    },
   ) {
     super(scope, id);
 
@@ -46,21 +75,47 @@ export class Scheduler extends Construct {
       partitionKey: { name: 'pk', type: AttributeType.STRING },
       sortKey: { name: 'sk', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
+      stream: disableNearFutureScheduling
+        ? undefined
+        : StreamViewType.NEW_IMAGE,
     });
 
     this.schedulingQueue = new Queue(this, 'SchedulingQueue', {
       visibilityTimeout: Duration.seconds(300),
-      ...(noDuplication ? { fifo: true, contentBasedDeduplication: true } : {}),
+      ...(allowDuplication
+        ? {}
+        : { fifo: true, contentBasedDeduplication: true }),
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {
-      entry: 'lib/extract.js',
+      entry: 'build/lib/extract.js',
       events: [],
       retryAttempts: 2,
+      environment: {
+        TABLE_NAME: this.schedulerTable.tableName,
+        QUEUE_URL: this.schedulingQueue.queueUrl,
+      },
     });
 
     this.schedulerTable.grantReadWriteData(this.extractHandler);
     this.schedulingQueue.grantSendMessages(this.extractHandler);
+
+    if (!disableNearFutureScheduling) {
+      this.nearFutureHandler = new NodejsFunction(this, 'NearFutureHandler', {
+        entry: 'build/lib/handleNearFuture.js',
+        retryAttempts: 2,
+        environment: {
+          TABLE_NAME: this.schedulerTable.tableName,
+          QUEUE_URL: this.schedulingQueue.queueUrl,
+        },
+      });
+
+      this.nearFutureHandler.addEventSource(
+        new DynamoEventSource(this.schedulerTable, {
+          startingPosition: StartingPosition.LATEST,
+        }),
+      );
+    }
 
     new Rule(this, 'ScheduleTrigger', {
       schedule: Schedule.rate(Duration.minutes(this.cronDelayInMinutes)),

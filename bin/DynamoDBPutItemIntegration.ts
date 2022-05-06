@@ -36,13 +36,9 @@ export class DynamoDBPutItemIntegration extends AwsIntegration {
     };
 
     const responseTemplate = {
-      statusCode: '200',
-      status: 200,
-      data: {
-        id: "$input.path('$.id')#$context.requestId",
-        publicationTimestamp: "$input.path('$.publicationTimestamp')",
-        payload: { message: 'Custom payload not implemented' },
-      },
+      id: "$input.path('$.id')#$context.requestId",
+      publicationTimestamp: "$input.path('$.publicationTimestamp')",
+      payload: { message: 'Custom payload not implemented' },
     };
 
     super({
