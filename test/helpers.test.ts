@@ -1,5 +1,5 @@
 import {
-  extractDelay,
+  extractDelaySeconds,
   extractId,
   getExpressionAttributeValues,
 } from '../lib/functions/helpers';
@@ -32,19 +32,20 @@ const defaultCronDelay = 14;
 describe('helpers', () => {
   describe('extractDelay', () => {
     it('should extract delay from event', () => {
-      const delayInMinutes = extractDelay(events[0], now) / 60;
+      const delayInMinutes = extractDelaySeconds(events[0], now) / 60;
 
       expect(delayInMinutes).toEqual(10);
     });
     it('should return 0 if the delay is negative', () => {
-      const delayInMinutes = extractDelay({ sk: { S: '0#def#ghi' } }, now) / 60;
+      const delayInMinutes =
+        extractDelaySeconds({ sk: { S: '0#def#ghi' } }, now) / 60;
 
       expect(delayInMinutes).toEqual(0);
     });
     it('should throw an error if the publication timestamp can not be parsed', () => {
-      expect(() => extractDelay({ sk: { S: 'abc#def#ghi' } }, now)).toThrow(
-        'Delay could not be parse',
-      );
+      expect(() =>
+        extractDelaySeconds({ sk: { S: 'abc#def#ghi' } }, now),
+      ).toThrow('Delay could not be parse');
     });
   });
 

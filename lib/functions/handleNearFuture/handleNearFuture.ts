@@ -1,18 +1,21 @@
 import { DynamoDBStreams } from 'aws-sdk';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { CRON_DELAY_IN_MINUTES } from '../../index';
-import { extractDelay, getNow } from '../helpers';
+import { extractDelaySeconds, getEnvVariable, getNow } from '../helpers';
 import { sendEventsToSQSAndDeleteRecords } from '../sendEventsToSQSAndDeleteRecords';
 import { SchedulerDynamoDBRecord } from '../../types';
 
 const isValidRecord = (record: unknown): record is SchedulerDynamoDBRecord =>
-  // @ts-expect-error record if of type unknw
+  // @ts-expect-error record if of type unknown
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   record?.sk?.S !== undefined;
 
 export const handler = async (
   event: DynamoDBStreams.Types.GetRecordsOutput,
 ): Promise<ReturnType<typeof sendEventsToSQSAndDeleteRecords> | undefined> => {
+  const tableName = getEnvVariable('TABLE_NAME');
+  const queueUrl = getEnvVariable('QUEUE_URL');
+
   if (event.Records === undefined) {
     return;
   }
@@ -25,12 +28,12 @@ export const handler = async (
   ).filter(
     record =>
       isValidRecord(record) &&
-      extractDelay(record, now) <= CRON_DELAY_IN_MINUTES + 1,
+      extractDelaySeconds(record, now) <= (CRON_DELAY_IN_MINUTES + 1) * 60,
   ) as unknown[] as SchedulerDynamoDBRecord[];
 
   return await sendEventsToSQSAndDeleteRecords(recordsToHandle, {
-    queueUrl: process.env.QUEUE_URL ?? 'INVALID_QUEUE_URL',
-    tableName: process.env.TABLE_NAME ?? 'INVALID_TABLE_NAME',
+    queueUrl,
+    tableName,
     dynamodb,
   });
 };

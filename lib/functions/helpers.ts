@@ -2,8 +2,11 @@ import { SchedulerDynamoDBRecord } from '../types';
 
 export const getNow = (): number => Date.now();
 
-/** Returns the delay between now and the record publication timestamp, in seconds */
-export const extractDelay = (
+/** Returns the delay between now and the record publication timestamp, in seconds.
+ *
+ * NB: if the delay is negative, i.e. the record is in the past, it returns 0.
+ */
+export const extractDelaySeconds = (
   record: Pick<SchedulerDynamoDBRecord, 'sk'>,
   now: number,
 ): number => {
@@ -39,3 +42,11 @@ export const getExpressionAttributeValues = (
     S: (now + (cronDelay + 1) * 60 * 1000).toString(),
   },
 });
+
+export const getEnvVariable = (name: string): string => {
+  const variable = process.env[name];
+  if (variable === undefined)
+    throw new Error(`Environment variable not found: ${name}`);
+
+  return variable;
+};

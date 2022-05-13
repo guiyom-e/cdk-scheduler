@@ -17,9 +17,7 @@ import { DynamoDBPutItemIntegration } from './DynamoDBPutItemIntegration';
 class AppStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-    const schedulerLib = new Scheduler(this, 'scheduler-lib', {
-      allowDuplication: false,
-    });
+    const schedulerLib = new Scheduler(this, 'scheduler-lib', {});
 
     // Integration example to add a scheduled event with a REST API
     const dynamoDbApiIntegrationRole = new Role(
@@ -70,7 +68,7 @@ class AppStack extends Stack {
     const triggeredLambda = new Function(this, 'TriggeredFunction', {
       handler: 'index.main',
       code: Code.fromInline(
-        "exports.main=(event)=>console.log('Scheduled event received!',event);",
+        'exports.main=(event)=>console.log(`Scheduled event received at ${new Date().toISOString()}:`,event);',
       ),
       runtime: Runtime.NODEJS_14_X,
     });

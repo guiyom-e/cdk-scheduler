@@ -1,18 +1,24 @@
 {
-  "ApproximateCreationDateTime": 1651240637,
-  "Keys": {
-    "sk": { "S": "1651240630745##4d53c62d-11d0-4659-8048-419fd8c0dca2" },
-    "pk": { "S": "scheduler" }
-  },
-  "NewImage": {
-    "payload": {
-      "M": { "message": { "S": "Custom payload not implemented" } }
-    },
-    "sk": { "S": "1651240630745##4d53c62d-11d0-4659-8048-419fd8c0dca2" },
-    "id": { "S": "#4d53c62d-11d0-4659-8048-419fd8c0dca2" },
-    "pk": { "S": "scheduler" }
-  },
-  "SequenceNumber": "90725900000000001070911445",
-  "SizeBytes": 215,
-  "StreamViewType": "NEW_IMAGE"
+  "Records": [
+    {
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1651240637,
+        "Keys": {
+          "sk": { "S": "1651240630745#4d53c62d-11d0-4659-8048-419fd8c0dca2" },
+          "pk": { "S": "scheduler" }
+        },
+        "NewImage": {
+          "payload": {
+            "M": { "message": { "S": "Test payload" } }
+          },
+          "sk": { "S": "1651240630745#4d53c62d-11d0-4659-8048-419fd8c0dca2" },
+          "id": { "S": "4d53c62d-11d0-4659-8048-419fd8c0dca2" },
+          "pk": { "S": "scheduler" }
+        },
+        "SequenceNumber": "90725900000000001070911445",
+        "SizeBytes": 215,
+        "StreamViewType": "NEW_IMAGE"
+      }
+    }
+  ]
 }

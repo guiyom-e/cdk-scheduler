@@ -1,6 +1,10 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
-import { getExpressionAttributeValues, getNow } from '../helpers';
+import {
+  getEnvVariable,
+  getExpressionAttributeValues,
+  getNow,
+} from '../helpers';
 import { sendEventsToSQSAndDeleteRecords } from '../sendEventsToSQSAndDeleteRecords';
 import { SchedulerDynamoDBRecord } from '../../types';
 
@@ -12,13 +16,14 @@ interface HandlerConfig {
 }
 
 export const handler = async ({
-  tableName,
-  queueUrl,
   cronDelayInMinutes,
   partitionKeyValue,
 }: HandlerConfig): Promise<
   ReturnType<typeof sendEventsToSQSAndDeleteRecords>
 > => {
+  const tableName = getEnvVariable('TABLE_NAME');
+  const queueUrl = getEnvVariable('QUEUE_URL');
+
   if (cronDelayInMinutes <= 0 || cronDelayInMinutes > 14) {
     throw new Error(
       'Invalid configuration: cronDelayInMinutes must be an integer between 1 and 14 minutes.',

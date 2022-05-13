@@ -10,25 +10,7 @@ test('SQS Queue Created', () => {
 
   template.hasResourceProperties('AWS::SQS::Queue', {
     VisibilityTimeout: 300,
-    FifoQueue: true,
-    ContentBasedDeduplication: true,
   });
-});
-
-test('SQS Queue Created without deduplication', () => {
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'AppStack');
-  new Scheduler(stack, 'my-lib', { allowDuplication: true });
-  const template = Template.fromStack(stack);
-
-  template.hasResourceProperties('AWS::SQS::Queue', {
-    VisibilityTimeout: 300,
-  });
-  expect(() =>
-    template.hasResourceProperties('AWS::SQS::Queue', {
-      FifoQueue: true,
-    }),
-  ).toThrow();
 });
 
 test('DynamoDB created with stream', () => {
@@ -104,19 +86,21 @@ test('DynamoDB created without stream', () => {
 });
 
 test.each`
-  disableNearFutureScheduling | allowDuplication
-  ${false}                    | ${false}
-  ${true}                     | ${false}
-  ${false}                    | ${true}
-  ${true}                     | ${true}
+  disableNearFutureScheduling
+  ${undefined}
+  ${false}
+  ${true}
 `(
   'Lambdas and trigger created',
-  ({ disableNearFutureScheduling, allowDuplication }) => {
+  ({
+    disableNearFutureScheduling,
+  }: {
+    disableNearFutureScheduling: boolean;
+  }) => {
     const app = new cdk.App();
     const stack = new cdk.Stack(app, 'AppStack');
     new Scheduler(stack, 'my-lib', {
       disableNearFutureScheduling,
-      allowDuplication,
     });
     const template = Template.fromStack(stack);
 
