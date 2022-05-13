@@ -1,8 +1,4 @@
 {
     "extends": "../tsconfig.json",
-    "compilerOptions": {
-        "paths": {
-          }
-    },
-    "exclude": ["node_modules", "cdk.out", "build"]
+    "exclude": [ "cdk.out"]
 }

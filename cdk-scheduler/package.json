@@ -34,7 +34,7 @@
     "build": "tsc && yarn babel build/lib --out-dir build/lib --extensions \".js\"",
     "watch": "tsc -w",
     "test-type": "tsc --noEmit",
-    "test-lint": "eslint",
+    "test-lint": "eslint . --ext js,ts --ignore-path ../.gitignore",
     "test-unit": "jest",
     "test": "yarn test-lint && yarn test-type && yarn test-unit"
   },
