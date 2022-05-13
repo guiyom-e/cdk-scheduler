@@ -1,7 +1,7 @@
 {
   "name": "cdk-scheduler",
   "description": "Precise-to-the-second CDK construct to schedule events",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/guiyom-e/cdk-scheduler",
