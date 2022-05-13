@@ -1,0 +1,15 @@
+{
+  "name": "demon",
+  "version": "1.0.0",
+  "scripts": {
+    "deploy": "cdk deploy"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.23.0",
+    "cdk-scheduler": "0.1.3",
+    "constructs": "^10.1.6"
+  },
+  "devDependencies": {
+    "cdk": "^2.24.1"
+  }
+}
