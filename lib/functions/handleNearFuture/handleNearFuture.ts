@@ -1,9 +1,9 @@
 import { DynamoDBStreams } from 'aws-sdk';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { CRON_DELAY_IN_MINUTES } from 'lib/index';
-import { extractDelay, getNow } from 'lib/functions/helpers';
-import { sendEventsToSQSAndDeleteRecords } from 'lib/functions/sendEventsToSQSAndDeleteRecords';
-import { SchedulerDynamoDBRecord } from 'lib/types';
+import { CRON_DELAY_IN_MINUTES } from '../../index';
+import { extractDelay, getNow } from '../helpers';
+import { sendEventsToSQSAndDeleteRecords } from '../sendEventsToSQSAndDeleteRecords';
+import { SchedulerDynamoDBRecord } from '../../types';
 
 const isValidRecord = (record: unknown): record is SchedulerDynamoDBRecord =>
   // @ts-expect-error record if of type unknw

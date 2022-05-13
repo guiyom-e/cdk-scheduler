@@ -18,11 +18,7 @@
     "declarationMap": true,
     "strictFunctionTypes": false,
     "strictNullChecks": true,
-    "outDir": "build",
-    "baseUrl": ".",
-    "paths": {
-      "lib/*": ["./lib/*"]
-    }
+    "outDir": "build"
   },
   "exclude": ["node_modules", "cdk.out", "build"]
 }
