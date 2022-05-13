@@ -33,14 +33,19 @@ export const sendEventsToSQSAndDeleteRecords = async (
   const sqs = new SQS();
   const now = getNow();
 
-  const entries = records.map(record => ({
-    Id: extractId(record),
-    DelaySeconds: extractDelay(record, now),
-    MessageBody: JSON.stringify({
-      publicationTimestamp: record.sk.S.split('#')[0],
-      payload: record.payload,
-    }),
-  }));
+  const entries = records.map(record => {
+    const recordId = extractId(record);
+
+    return {
+      Id: recordId,
+      DelaySeconds: extractDelay(record, now),
+      MessageBody: JSON.stringify({
+        publicationTimestamp: record.sk.S.split('#')[0],
+        payload: record.payload,
+      }),
+      MessageGroupId: recordId,
+    };
+  });
 
   const failedIds: string[] = [];
   const successIdsWithFailedDeletion: unknown[] = [];
