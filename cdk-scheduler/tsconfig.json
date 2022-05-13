@@ -1,0 +1,11 @@
+{
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "build",
+        "baseUrl": ".",
+        "paths": {
+            "lib/*": ["lib/*"]
+          }
+    },
+    "exclude": ["node_modules", "cdk.out", "build"]
+}
