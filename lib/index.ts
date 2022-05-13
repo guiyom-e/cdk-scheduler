@@ -94,6 +94,9 @@ export class Scheduler extends Construct {
         },
       });
 
+      this.schedulerTable.grantReadWriteData(this.nearFutureHandler);
+      this.schedulingQueue.grantSendMessages(this.nearFutureHandler);
+
       this.nearFutureHandler.addEventSource(
         new DynamoEventSource(this.schedulerTable, {
           startingPosition: StartingPosition.LATEST,
