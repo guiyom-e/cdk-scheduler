@@ -68,7 +68,7 @@ class AppStack extends Stack {
     const triggeredLambda = new Function(this, 'TriggeredFunction', {
       handler: 'index.main',
       code: Code.fromInline(
-        "exports.main=(event)=>console.log('Scheduled event received!',event);",
+        'exports.main=(event)=>console.log(`Scheduled event received at ${new Date().toISOString()}:`,event);',
       ),
       runtime: Runtime.NODEJS_14_X,
     });
