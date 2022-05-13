@@ -1,7 +1,7 @@
 import { DynamoDBStreams } from 'aws-sdk';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { CRON_DELAY_IN_MINUTES } from '../../index';
-import { extractDelay, getEnvVariable, getNow } from '../helpers';
+import { extractDelaySeconds, getEnvVariable, getNow } from '../helpers';
 import { sendEventsToSQSAndDeleteRecords } from '../sendEventsToSQSAndDeleteRecords';
 import { SchedulerDynamoDBRecord } from '../../types';
 
@@ -28,7 +28,7 @@ export const handler = async (
   ).filter(
     record =>
       isValidRecord(record) &&
-      extractDelay(record, now) <= CRON_DELAY_IN_MINUTES + 1,
+      extractDelaySeconds(record, now) <= (CRON_DELAY_IN_MINUTES + 1) * 60,
   ) as unknown[] as SchedulerDynamoDBRecord[];
 
   return await sendEventsToSQSAndDeleteRecords(recordsToHandle, {

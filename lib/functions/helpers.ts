@@ -6,7 +6,7 @@ export const getNow = (): number => Date.now();
  *
  * NB: if the delay is negative, i.e. the record is in the past, it returns 0.
  */
-export const extractDelay = (
+export const extractDelaySeconds = (
   record: Pick<SchedulerDynamoDBRecord, 'sk'>,
   now: number,
 ): number => {
