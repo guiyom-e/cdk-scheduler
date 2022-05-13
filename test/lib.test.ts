@@ -87,61 +87,69 @@ test('DynamoDB created without stream', () => {
 
 test.each`
   disableNearFutureScheduling
+  ${undefined}
   ${false}
   ${true}
-`('Lambdas and trigger created', ({ disableNearFutureScheduling }) => {
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'AppStack');
-  new Scheduler(stack, 'my-lib', {
+`(
+  'Lambdas and trigger created',
+  ({
     disableNearFutureScheduling,
-  });
-  const template = Template.fromStack(stack);
+  }: {
+    disableNearFutureScheduling: boolean;
+  }) => {
+    const app = new cdk.App();
+    const stack = new cdk.Stack(app, 'AppStack');
+    new Scheduler(stack, 'my-lib', {
+      disableNearFutureScheduling,
+    });
+    const template = Template.fromStack(stack);
 
-  template.resourceCountIs(
-    'AWS::Lambda::Function',
-    disableNearFutureScheduling ? 1 : 2,
-  );
+    template.resourceCountIs(
+      'AWS::Lambda::Function',
+      disableNearFutureScheduling ? 1 : 2,
+    );
 
-  template.hasResourceProperties('AWS::Lambda::Function', {
-    Handler: 'index.handler',
-    Runtime: 'nodejs14.x',
-  });
+    template.hasResourceProperties('AWS::Lambda::Function', {
+      Handler: 'index.handler',
+      Runtime: 'nodejs14.x',
+    });
 
-  expect(CRON_DELAY_IN_MINUTES).toBeGreaterThan(0);
-  expect(CRON_DELAY_IN_MINUTES).toBeLessThanOrEqual(14);
+    expect(CRON_DELAY_IN_MINUTES).toBeGreaterThan(0);
+    expect(CRON_DELAY_IN_MINUTES).toBeLessThanOrEqual(14);
 
-  // ExtractHandler lambda
-  template.hasResourceProperties('AWS::Events::Rule', {
-    ScheduleExpression: `rate(${CRON_DELAY_IN_MINUTES} minutes)`,
-    State: 'ENABLED',
-  });
+    // ExtractHandler lambda
+    template.hasResourceProperties('AWS::Events::Rule', {
+      ScheduleExpression: `rate(${CRON_DELAY_IN_MINUTES} minutes)`,
+      State: 'ENABLED',
+    });
 
-  template.hasResourceProperties('AWS::IAM::Role', {
-    AssumeRolePolicyDocument: {
-      Statement: [
-        {
-          Action: 'sts:AssumeRole',
-          Effect: 'Allow',
-          Principal: {
-            Service: 'lambda.amazonaws.com',
+    template.hasResourceProperties('AWS::IAM::Role', {
+      AssumeRolePolicyDocument: {
+        Statement: [
+          {
+            Action: 'sts:AssumeRole',
+            Effect: 'Allow',
+            Principal: {
+              Service: 'lambda.amazonaws.com',
+            },
           },
+        ],
+        Version: '2012-10-17',
+      },
+      ManagedPolicyArns: [
+        {
+          'Fn::Join': [
+            '',
+            [
+              'arn:',
+              {
+                Ref: 'AWS::Partition',
+              },
+              ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+            ],
+          ],
         },
       ],
-      Version: '2012-10-17',
-    },
-    ManagedPolicyArns: [
-      {
-        'Fn::Join': [
-          '',
-          [
-            'arn:',
-            {
-              Ref: 'AWS::Partition',
-            },
-            ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-          ],
-        ],
-      },
-    ],
-  });
-});
+    });
+  },
+);
