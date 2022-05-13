@@ -10,25 +10,7 @@ test('SQS Queue Created', () => {
 
   template.hasResourceProperties('AWS::SQS::Queue', {
     VisibilityTimeout: 300,
-    FifoQueue: true,
-    ContentBasedDeduplication: true,
   });
-});
-
-test('SQS Queue Created without deduplication', () => {
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app, 'AppStack');
-  new Scheduler(stack, 'my-lib', { allowDuplication: true });
-  const template = Template.fromStack(stack);
-
-  template.hasResourceProperties('AWS::SQS::Queue', {
-    VisibilityTimeout: 300,
-  });
-  expect(() =>
-    template.hasResourceProperties('AWS::SQS::Queue', {
-      FifoQueue: true,
-    }),
-  ).toThrow();
 });
 
 test('DynamoDB created with stream', () => {
@@ -104,68 +86,62 @@ test('DynamoDB created without stream', () => {
 });
 
 test.each`
-  disableNearFutureScheduling | allowDuplication
-  ${false}                    | ${false}
-  ${true}                     | ${false}
-  ${false}                    | ${true}
-  ${true}                     | ${true}
-`(
-  'Lambdas and trigger created',
-  ({ disableNearFutureScheduling, allowDuplication }) => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app, 'AppStack');
-    new Scheduler(stack, 'my-lib', {
-      disableNearFutureScheduling,
-      allowDuplication,
-    });
-    const template = Template.fromStack(stack);
+  disableNearFutureScheduling
+  ${false}
+  ${true}
+`('Lambdas and trigger created', ({ disableNearFutureScheduling }) => {
+  const app = new cdk.App();
+  const stack = new cdk.Stack(app, 'AppStack');
+  new Scheduler(stack, 'my-lib', {
+    disableNearFutureScheduling,
+  });
+  const template = Template.fromStack(stack);
 
-    template.resourceCountIs(
-      'AWS::Lambda::Function',
-      disableNearFutureScheduling ? 1 : 2,
-    );
+  template.resourceCountIs(
+    'AWS::Lambda::Function',
+    disableNearFutureScheduling ? 1 : 2,
+  );
 
-    template.hasResourceProperties('AWS::Lambda::Function', {
-      Handler: 'index.handler',
-      Runtime: 'nodejs14.x',
-    });
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    Handler: 'index.handler',
+    Runtime: 'nodejs14.x',
+  });
 
-    expect(CRON_DELAY_IN_MINUTES).toBeGreaterThan(0);
-    expect(CRON_DELAY_IN_MINUTES).toBeLessThanOrEqual(14);
+  expect(CRON_DELAY_IN_MINUTES).toBeGreaterThan(0);
+  expect(CRON_DELAY_IN_MINUTES).toBeLessThanOrEqual(14);
 
-    // ExtractHandler lambda
-    template.hasResourceProperties('AWS::Events::Rule', {
-      ScheduleExpression: `rate(${CRON_DELAY_IN_MINUTES} minutes)`,
-      State: 'ENABLED',
-    });
+  // ExtractHandler lambda
+  template.hasResourceProperties('AWS::Events::Rule', {
+    ScheduleExpression: `rate(${CRON_DELAY_IN_MINUTES} minutes)`,
+    State: 'ENABLED',
+  });
 
-    template.hasResourceProperties('AWS::IAM::Role', {
-      AssumeRolePolicyDocument: {
-        Statement: [
-          {
-            Action: 'sts:AssumeRole',
-            Effect: 'Allow',
-            Principal: {
-              Service: 'lambda.amazonaws.com',
-            },
-          },
-        ],
-        Version: '2012-10-17',
-      },
-      ManagedPolicyArns: [
+  template.hasResourceProperties('AWS::IAM::Role', {
+    AssumeRolePolicyDocument: {
+      Statement: [
         {
-          'Fn::Join': [
-            '',
-            [
-              'arn:',
-              {
-                Ref: 'AWS::Partition',
-              },
-              ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-            ],
-          ],
+          Action: 'sts:AssumeRole',
+          Effect: 'Allow',
+          Principal: {
+            Service: 'lambda.amazonaws.com',
+          },
         },
       ],
-    });
-  },
-);
+      Version: '2012-10-17',
+    },
+    ManagedPolicyArns: [
+      {
+        'Fn::Join': [
+          '',
+          [
+            'arn:',
+            {
+              Ref: 'AWS::Partition',
+            },
+            ':iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+          ],
+        ],
+      },
+    ],
+  });
+});
