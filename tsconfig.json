@@ -17,8 +17,6 @@
     "declaration": true,
     "declarationMap": true,
     "strictFunctionTypes": false,
-    "strictNullChecks": true,
-    "outDir": "build"
+    "strictNullChecks": true
   },
-  "exclude": ["node_modules", "cdk.out", "build"]
 }
