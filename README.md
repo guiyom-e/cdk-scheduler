@@ -2,7 +2,7 @@
 
 > A CDK construct to schedule events precisely ⏱
 
-This construct enables you to trigger an event at a given time on a serverless architecture.
+This construct enables to trigger an event at a given time on a serverless architecture.
 
 You should use cdk-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application.
 
@@ -43,7 +43,7 @@ const myScheduler = new Scheduler(app, id);
 ```
 
 - `app` : Your CDK app (a `Construct`)
-- `id` : The id/name of your scheduler (a `string`)
+- `id` : The id/name of the scheduler (a `string`)
 
 ### Write messages to the scheduler
 
@@ -53,15 +53,15 @@ Grant access to write a new message to the scheduler to the service(s) that will
 myScheduler.schedulerTable.grantWriteData(newMessageLambda);
 ```
 
-Then you can post new messages to the scheduler by inset a new row into the `myScheduler.schedulerTable` dynamoDB table. The parameters you need to do so are the following :
+Messages can be posted to the scheduler by inserting a new row into the `myScheduler.schedulerTable` dynamoDB table. Parameters needed are:
 
-- The **name of the table** to insert to is `myScheduler.schedulerTable.tableName`
-- The **partition key** to use in this table is `myScheduler.partitionKeyValue`
-- The **sort key** to use must be like "`${timestamp}#${id}`"
+- The **name of the table** to insert to : `myScheduler.schedulerTable.tableName`
+- The **partition key** to use in this table : `myScheduler.partitionKeyValue`
+- The **sort key** to use must be like "`[timestamp]#[id]`"
   - _For example : "`1653052252606#some-random-id`" to schedule the event the `2022-05-20` at `13:10 UTC`_)
-- The **payload** can be anything you want to put in your message
+- The **payload** must be a mapping with any content
 
-For example you could use the following snippet to create a new message from a lambda (with the good values passed in the environment of the lambda) :
+An example to create a new message from a lambda (with the appropriate values passed in the environment of the lambda) :
 
 ```ts
 const dynamo = new DynamoDB({
@@ -76,8 +76,8 @@ dynamo.putItem({
 
 ### Consume messages from the scheduler
 
-Finally to consume the events when the scheduler outputs them you need to consume events from the SQS Queue accessible at `myScheduler.schedulingQueue`.
-For example to trigger some lambda integration you could do :
+The events can be consumed from the SQS Queue accessible at `myScheduler.schedulingQueue`.
+An example to trigger some lambda integration from the SQS :
 
 ```ts
 const eventSource = new SqsEventSource(myScheduler.schedulingQueue);
