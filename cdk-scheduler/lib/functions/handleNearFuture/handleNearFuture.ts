@@ -23,13 +23,15 @@ export const handler = async (
   const dynamodb = new DynamoDB({});
 
   const now = getNow();
-  const recordsToHandle = event.Records.map(
-    record => record.dynamodb?.NewImage,
-  ).filter(
-    record =>
-      isValidRecord(record) &&
-      extractDelaySeconds(record, now) <= (CRON_DELAY_IN_MINUTES + 1) * 60,
-  ) as unknown[] as SchedulerDynamoDBRecord[];
+  const recordsToHandle = event.Records.filter(record =>
+    ['INSERT', 'MODIFY'].includes(record.eventName ?? ''),
+  )
+    .map(record => record.dynamodb?.NewImage)
+    .filter(
+      record =>
+        isValidRecord(record) &&
+        extractDelaySeconds(record, now) <= (CRON_DELAY_IN_MINUTES + 1) * 60,
+    ) as unknown[] as SchedulerDynamoDBRecord[];
 
   return await sendEventsToSQSAndDeleteRecords(recordsToHandle, {
     queueUrl,

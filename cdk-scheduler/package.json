@@ -1,7 +1,7 @@
 {
   "name": "cdk-scheduler",
   "description": "Precise-to-the-second CDK construct to schedule events",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/guiyom-e/cdk-scheduler",
@@ -33,6 +33,7 @@
   ],
   "scripts": {
     "build": "tsc && yarn babel build/lib --out-dir build/lib --extensions \".js\"",
+    "publish": "yarn build && npm publish --access public",
     "watch": "tsc -w",
     "test-type": "tsc --noEmit",
     "test-lint": "eslint . --ext js,ts --ignore-path ../.gitignore",
@@ -49,7 +50,7 @@
     "@typescript-eslint/parser": "^5.16.0",
     "aws-cdk-lib": "^2.24.1",
     "babel-plugin-search-and-replace": "^1.1.0",
-    "cdk": "^2.17.0",
+    "cdk": "^2.24.1",
     "constructs": "^10.0.0",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
@@ -63,16 +64,9 @@
     "ts-jest": "^26.2.0",
     "typescript": "~3.9.7"
   },
-  "peerDependencies": {
-    "aws-cdk-lib": "2.17.0",
-    "constructs": "^10.0.0"
-  },
   "packageManager": "yarn@3.1.1",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.58.0",
-    "@aws-sdk/lib-dynamodb": "^3.56.0",
-    "@aws-sdk/util-dynamodb": "^3.56.0",
-    "@aws/dynamodb-data-marshaller": "^0.7.3",
     "aws-sdk": "^2.1105.0",
     "lodash": "^4.17.21"
   },
