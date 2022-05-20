@@ -10,7 +10,7 @@ import {
 import { Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
-import { Scheduler } from '../lib';
+import { Scheduler } from 'cdk-scheduler';
 import { DynamoDBPutItemIntegration } from './DynamoDBPutItemIntegration';
 
 /** Integration of the scheduling library */
