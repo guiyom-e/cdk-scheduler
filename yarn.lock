@@ -377,20 +377,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-dynamodb@npm:^3.56.0":
-  version: 3.95.0
-  resolution: "@aws-sdk/lib-dynamodb@npm:3.95.0"
-  dependencies:
-    "@aws-sdk/util-dynamodb": 3.95.0
-    tslib: ^2.3.1
-  peerDependencies:
-    "@aws-sdk/client-dynamodb": ^3.0.0
-    "@aws-sdk/smithy-client": ^3.0.0
-    "@aws-sdk/types": ^3.0.0
-  checksum: 1dd4228dc2ddb782fe02705ec8bbb52d0259185e01a92e1c754ec5b762b2de18a5359031788cf219e38e9bbf9c12e1a4f2697f3445901c5c93af8b9b28f72425
-  languageName: node
-  linkType: hard
-
 "@aws-sdk/middleware-content-length@npm:3.78.0":
   version: 3.78.0
   resolution: "@aws-sdk/middleware-content-length@npm:3.78.0"
@@ -714,15 +700,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/util-dynamodb@npm:3.95.0, @aws-sdk/util-dynamodb@npm:^3.56.0":
-  version: 3.95.0
-  resolution: "@aws-sdk/util-dynamodb@npm:3.95.0"
-  dependencies:
-    tslib: ^2.3.1
-  checksum: 9e650bce28daf3f5aae50a8b3dcb31ec0df1f38da3fd746f2bc1a4d786e831f3da621e30fbeeb90777eed30051b32be3fc27bb7c1932245df8b0e2c49a342ec3
-  languageName: node
-  linkType: hard
-
 "@aws-sdk/util-hex-encoding@npm:3.58.0":
   version: 3.58.0
   resolution: "@aws-sdk/util-hex-encoding@npm:3.58.0"
@@ -808,43 +785,6 @@ __metadata:
     "@aws-sdk/types": 3.78.0
     tslib: ^2.3.1
   checksum: 3bbd431046dae2299960e9b93765ed2eb970e74a55024da164a307fff71443421cacff695d058972a6552d7209010a315edafad414f942edb0be73269ff0854d
-  languageName: node
-  linkType: hard
-
-"@aws/dynamodb-auto-marshaller@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "@aws/dynamodb-auto-marshaller@npm:0.7.1"
-  dependencies:
-    tslib: ^1.8.1
-  peerDependencies:
-    aws-sdk: ^2.7.0
-  checksum: 7f176a778dbba09c6ecf734b98061965073831c9feea15a14ce2acc16933131b4b0fb4298b22a5ec28a3b76e453f8c5f7644a802b39229bc82395fc8005beea4
-  languageName: node
-  linkType: hard
-
-"@aws/dynamodb-data-marshaller@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "@aws/dynamodb-data-marshaller@npm:0.7.3"
-  dependencies:
-    "@aws/dynamodb-auto-marshaller": ^0.7.1
-    "@aws/dynamodb-expressions": ^0.7.3
-    tslib: ^1.8.1
-    utf8-bytes: ^0.0.1
-  peerDependencies:
-    aws-sdk: ^2.7.0
-  checksum: e6e02dd1e3c6b0957362114747e77db345293a7d6322c7caf421cf096898f4edf8a9f74eec83d320270d600558ad2ffbb4286865cb616d703e27ccb0f4c8b63f
-  languageName: node
-  linkType: hard
-
-"@aws/dynamodb-expressions@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "@aws/dynamodb-expressions@npm:0.7.3"
-  dependencies:
-    "@aws/dynamodb-auto-marshaller": ^0.7.1
-    tslib: ^1.8.1
-  peerDependencies:
-    aws-sdk: ^2.7.0
-  checksum: 4ee9fcf936141102c4e9aac31bc97e45f59857222bcf52dfd479e95cfedb910171480a4a7c2914d94320db850996f10c82e0a9cc78346c42d8d7e4d3b1b0b8c7
   languageName: node
   linkType: hard
 
@@ -3327,9 +3267,6 @@ __metadata:
   resolution: "cdk-scheduler@workspace:cdk-scheduler"
   dependencies:
     "@aws-sdk/client-dynamodb": ^3.58.0
-    "@aws-sdk/lib-dynamodb": ^3.56.0
-    "@aws-sdk/util-dynamodb": ^3.56.0
-    "@aws/dynamodb-data-marshaller": ^0.7.3
     "@babel/cli": ^7.17.10
     "@babel/core": ^7.17.10
     "@types/jest": ^26.0.10
@@ -3354,9 +3291,6 @@ __metadata:
     prettier: ^2.6.1
     ts-jest: ^26.2.0
     typescript: ~3.9.7
-  peerDependencies:
-    aws-cdk-lib: ^2.24.1
-    constructs: ^10.0.0
   languageName: unknown
   linkType: soft
 
@@ -9527,13 +9461,6 @@ __metadata:
   version: 3.1.1
   resolution: "use@npm:3.1.1"
   checksum: 08a130289f5238fcbf8f59a18951286a6e660d17acccc9d58d9b69dfa0ee19aa038e8f95721b00b432c36d1629a9e32a464bf2e7e0ae6a244c42ddb30bdd8b33
-  languageName: node
-  linkType: hard
-
-"utf8-bytes@npm:^0.0.1":
-  version: 0.0.1
-  resolution: "utf8-bytes@npm:0.0.1"
-  checksum: be2e90e3395dce550ba52d2136d26c10b980cc4cc58159a6ecdd8bb4b47f90720bf42c384eaca4292581fabfe530d4a23b2941d8047948e27fd07e0d704ed3bc
   languageName: node
   linkType: hard
 
