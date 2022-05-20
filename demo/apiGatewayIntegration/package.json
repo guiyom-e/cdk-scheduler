@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "deploy": "cdk deploy",
-    "test-lint": "eslint . --ext js,ts --ignore-path ../.gitignore",
+    "test-lint": "eslint . --ext js,ts --ignore-path ../../.gitignore",
     "test-type": "tsc --noEmit",
     "test": "yarn test-lint && yarn test-type"
   },
