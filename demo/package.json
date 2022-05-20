@@ -8,8 +8,8 @@
     "test": "yarn test-lint && yarn test-type"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.23.0",
-    "cdk-scheduler": "0.1.3",
+    "aws-cdk-lib": "^2.24.1",
+    "cdk-scheduler": "*",
     "constructs": "^10.1.6"
   },
   "devDependencies": {
