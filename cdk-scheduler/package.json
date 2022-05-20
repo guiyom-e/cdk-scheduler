@@ -1,7 +1,7 @@
 {
   "name": "cdk-scheduler",
   "description": "Precise-to-the-second CDK construct to schedule events",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/guiyom-e/cdk-scheduler",
@@ -10,6 +10,7 @@
   "keywords": [
     "cdk",
     "aws",
+    "awscdk",
     "serverless",
     "lambda",
     "sqs",
