@@ -1,6 +1,7 @@
 {
   "Records": [
     {
+      "eventName": "INSERT",
       "dynamodb": {
         "ApproximateCreationDateTime": 1651240637,
         "Keys": {
