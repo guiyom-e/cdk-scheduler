@@ -5,13 +5,16 @@ import { sendEventsToSQSAndDeleteRecords } from '../lib/functions/sendEventsToSQ
 jest.mock('aws-sdk');
 jest.mock('@aws-sdk/client-dynamodb');
 
+const PK_WITH_SUCCESSFUL_DELETION = 'scheduler';
+const PK_WITH_FAILED_DELETION = 'not-scheduler';
+
 const mockDynamoDb = {
   deleteItem: ({
     Key: { pk, sk },
   }: {
     Key: { pk: { S: string }; sk: { S: string } };
   }) => {
-    if (pk.S === 'scheduler') {
+    if (pk.S === PK_WITH_SUCCESSFUL_DELETION) {
       return Promise.resolve(`DELETION_SUCCESS-${sk.S}`);
     }
 
@@ -23,10 +26,10 @@ const mockDynamoDb = {
   sendMessageBatch: () => ({
     promise: () => ({
       Successful: [
-        { Id: 'ID_SUCCESSFUL_DELETION' },
-        { Id: 'ID_FAILED_DELETION' },
+        { Id: '1651240630745-ID_SUCCESSFUL_DELETION' },
+        { Id: '1651240630745-ID_FAILED_DELETION' },
       ],
-      Failed: [{ Id: 'ID_FAILED' }],
+      Failed: [{ Id: '1651240630745-ID_FAILED' }],
     }),
   }),
 }));
@@ -54,13 +57,13 @@ describe('sendEventsToSQSAndDeleteRecords', () => {
           },
           sk: { S: '1651240630745#ID_SUCCESSFUL_DELETION' },
           id: { S: 'ID_SUCCESSFUL_DELETION' },
-          pk: { S: 'scheduler' },
+          pk: { S: PK_WITH_SUCCESSFUL_DELETION },
         },
       ],
       { queueUrl: '', dynamodb: mockDynamoDb, tableName: '' },
     );
     expect(response).toEqual({
-      failedIds: ['ID_FAILED'],
+      failedIds: ['1651240630745-ID_FAILED'],
       successIdsWithFailedDeletion: [],
       successfulIdsWithSuccessfulDeletion: [
         'DELETION_SUCCESS-1651240630745#ID_SUCCESSFUL_DELETION',
@@ -76,7 +79,7 @@ describe('sendEventsToSQSAndDeleteRecords', () => {
           },
           sk: { S: '1651240630745#ID_SUCCESSFUL_DELETION' },
           id: { S: 'ID_SUCCESSFUL_DELETION' },
-          pk: { S: 'scheduler' },
+          pk: { S: PK_WITH_SUCCESSFUL_DELETION },
         },
         {
           payload: {
@@ -84,13 +87,13 @@ describe('sendEventsToSQSAndDeleteRecords', () => {
           },
           sk: { S: '1651240630745#ID_FAILED_DELETION' },
           id: { S: 'ID_FAILED_DELETION' },
-          pk: { S: 'not-scheduler' },
+          pk: { S: PK_WITH_FAILED_DELETION },
         },
       ],
       { queueUrl: '', dynamodb: mockDynamoDb, tableName: '' },
     );
     expect(response).toEqual({
-      failedIds: ['ID_FAILED'],
+      failedIds: ['1651240630745-ID_FAILED'],
       successIdsWithFailedDeletion: [
         'DELETION_FAILURE-1651240630745#ID_FAILED_DELETION',
       ],

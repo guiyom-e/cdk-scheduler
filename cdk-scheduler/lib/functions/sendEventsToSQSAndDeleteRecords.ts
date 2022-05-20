@@ -1,7 +1,12 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { SQS } from 'aws-sdk';
 
-import { extractDelaySeconds, extractId, getNow } from './helpers';
+import {
+  extractDelaySeconds,
+  extractIdForSQS,
+  extractTimestamp,
+  getNow,
+} from './helpers';
 import { SchedulerDynamoDBRecord } from '../types';
 
 const SQS_BATCH_SIZE = 10;
@@ -34,10 +39,10 @@ export const sendEventsToSQSAndDeleteRecords = async (
   const now = getNow();
 
   const entries = records.map(record => ({
-    Id: extractId(record),
+    Id: extractIdForSQS(record),
     DelaySeconds: extractDelaySeconds(record, now),
     MessageBody: JSON.stringify({
-      publicationTimestamp: record.sk.S.split('#')[0],
+      publicationTimestamp: extractTimestamp(record),
       payload: record.payload,
     }),
   }));
@@ -59,7 +64,7 @@ export const sendEventsToSQSAndDeleteRecords = async (
     );
     const deletions = await Promise.allSettled(
       records
-        .filter(record => successfulIds.includes(extractId(record)))
+        .filter(record => successfulIds.includes(extractIdForSQS(record)))
         .map(record =>
           dynamodb.deleteItem({
             TableName: tableName,

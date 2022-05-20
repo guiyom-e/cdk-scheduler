@@ -1,6 +1,6 @@
 import {
   extractDelaySeconds,
-  extractId,
+  extractIdForSQS,
   getExpressionAttributeValues,
 } from '../lib/functions/helpers';
 
@@ -45,34 +45,46 @@ describe('helpers', () => {
     it('should throw an error if the publication timestamp can not be parsed', () => {
       expect(() =>
         extractDelaySeconds({ sk: { S: 'abc#def#ghi' } }, now),
-      ).toThrow('Delay could not be parse');
+      ).toThrow('Timestamp could not be parse');
     });
   });
 
-  describe('extractId', () => {
+  describe('extractIdForSQS', () => {
     it('should extract id from event', () => {
-      const id = extractId(events[0]);
+      const id = extractIdForSQS(events[0]);
 
-      expect(id).toEqual('4455fee0-ce74-4145-991a-c78c82f31730');
+      expect(id).toEqual(`${publishDate}-4455fee0-ce74-4145-991a-c78c82f31730`);
     });
     it('should extract an id with multiple separators from event', () => {
-      const id = extractId({ pk: { S: '' }, sk: { S: '123#def#ghi' } });
+      const id = extractIdForSQS({ pk: { S: '' }, sk: { S: '123#def#ghi' } });
 
-      expect(id).toEqual('def#ghi');
+      expect(id).toEqual('123-def');
+    });
+    it('should extract an id with a maximum length of 80 characters', () => {
+      const id = extractIdForSQS({
+        pk: { S: '' },
+        sk: {
+          S: '123#abcdefghijklmnopqrstuvwxyz1234_abcdefghijklmnopqrstuvwxyz1234-0123456789_0123456789',
+        },
+      });
+
+      expect(id).toEqual(
+        '123-abcdefghijklmnopqrstuvwxyz1234_abcdefghijklmnopqrstuvwxyz1234-0123456789_012',
+      );
     });
     it('should throw an error if the event has an empty id', () => {
-      expect(() => extractId({ pk: { S: '' }, sk: { S: '' } })).toThrow(
+      expect(() => extractIdForSQS({ pk: { S: '' }, sk: { S: '' } })).toThrow(
         'Could not parse id',
       );
     });
     it('should throw an error if the event has an empty publication date', () => {
-      expect(() => extractId({ pk: { S: '' }, sk: { S: '#def#ghi' } })).toThrow(
-        'Could not parse id',
-      );
+      expect(() =>
+        extractIdForSQS({ pk: { S: '' }, sk: { S: '#def#ghi' } }),
+      ).toThrow('Could not parse id');
     });
     it('should throw an error if the event is not correctly formatted', () => {
       expect(() =>
-        extractId({ pk: { S: '' }, sk: { S: 'abc#def#ghi' } }),
+        extractIdForSQS({ pk: { S: '' }, sk: { S: 'abc#def#ghi' } }),
       ).toThrow('Could not parse id');
     });
   });
