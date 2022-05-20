@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "^2.24.1",
-    "cdk-scheduler": "0.1.3",
+    "cdk-scheduler": "latest",
     "constructs": "^10.1.6"
   },
   "devDependencies": {
