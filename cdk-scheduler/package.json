@@ -47,7 +47,7 @@
     "@types/node": "10.17.27",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
-    "aws-cdk-lib": "2.17.0",
+    "aws-cdk-lib": "^2.24.1",
     "babel-plugin-search-and-replace": "^1.1.0",
     "cdk": "^2.17.0",
     "constructs": "^10.0.0",
