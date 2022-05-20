@@ -1,5 +1,5 @@
 {
-  "name": "demo",
+  "name": "api-gateway-integration",
   "version": "1.0.0",
   "scripts": {
     "deploy": "cdk deploy",

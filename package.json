@@ -3,7 +3,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "demo",
+    "demo/*",
     "cdk-scheduler"
   ],
   "devDependencies": {

@@ -4,9 +4,10 @@ This is an example project to demonstrate the usage of the `cdk-scheduler` packa
 
 ## Installation
 
-- Clone this project locally, go to this folder and make sure you have the aws cli installed and configured on your machine
-- Install all dependencies by running `npm install`
-- Deploy the project by typing `npx cdk deploy --profile=<profile-name>`
+- Clone this project locally
+- Install all dependencies by running `yarn install`
+- Make sure you have the aws cli installed and configured on your machine
+- Go to this folder and deploy the project by typing `npx cdk deploy --profile=<profile-name>`
 
 You can find comments explaining the integration in the source files
 
