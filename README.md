@@ -22,63 +22,80 @@ yarn add cdk-scheduler
 
 ## Usage
 
-`cdk-scheduler` is powered by SQS feature to delay events up to 15 minutes. A lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.
+### Understand how the Scheduler works
 
-![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](./docs/images/Architecture%20Scheduler.jpg)
+`cdk-scheduler` is powered by SQS feature to delay events up to 15 minutes.
 
-### Usage example with CDK - Typescript
+A lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.
 
-You can check out the full implementation example in [app.ts](./bin/app.ts).
+### Import and initialize Scheduler
+
+Import the scheduler with :
 
 ```ts
 import { Scheduler } from 'cdk-scheduler';
-
-class AppStack extends Stack {
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
-
-    // Create Scheduler Construct
-    const schedulerLib = new Scheduler(this, 'scheduler-lib');
-
-    // Grant writing role to Dynamo DB to your service that will
-    const dynamoDbApiIntegrationRole = new Role(
-      this,
-      'DynamoDbApiIntegrationRole',
-      { assumedBy: new ServicePrincipal('apigateway.amazonaws.com') },
-    );
-
-    schedulerLib.schedulerTable.grantWriteData(dynamoDbApiIntegrationRole);
-
-    // Add an integration tool such as Dynamo integration or Lambda
-    const integration = new DynamoDBPutItemIntegration({
-      partitionKey: schedulerLib.partitionKeyValue,
-      table: schedulerLib.schedulerTable,
-      role: dynamoDbApiIntegrationRole,
-    });
-
-    const restApi = new RestApi(this, 'RestApi');
-
-    const addScheduledEventModel = restApi.addModel('AddScheduledEventModel', {
-        ...
-    });
-
-    restApi.root.addMethod('POST', integration, {
-      methodResponses: [{ statusCode: '200' }],
-      requestModels: {
-        'application/json': addScheduledEventModel,
-      },
-      requestValidatorOptions: {
-        validateRequestBody: true,
-        validateRequestParameters: true,
-      },
-      // authorizer: new RequestAuthorizer(stack, 'MyAuthorizer', {}),
-    });
-  }
-}
-
-const app = new App();
-new AppStack(app, 'AppStack');
 ```
+
+Then instantiate the scheduler :
+
+```ts
+const myScheduler = new Scheduler(app, id);
+```
+
+- `app` : Your CDK app (a `Construct`)
+- `id` : The id/name of your scheduler (a `string`)
+
+### Write messages to the scheduler
+
+Grant access to write a new message to the scheduler to the service(s) that will write to it. For example an API Integration or a lambda function :
+
+```ts
+myScheduler.schedulerTable.grantWriteData(newMessageLambda);
+```
+
+Then you can post new messages to the scheduler by inset a new row into the `myScheduler.schedulerTable` dynamoDB table. The parameters you need to do so are the following :
+
+- The **name of the table** to insert to is `myScheduler.schedulerTable.tableName`
+- The **partition key** to use in this table is `myScheduler.partitionKeyValue`
+- The **sort key** to use must be like "`${timestamp}#${id}`"
+  - _For example : "`1653052252606#some-random-id`" to schedule the event the `2022-05-20` at `13:10 UTC`_)
+- The **payload** can be anything you want to put in your message
+
+For example you could use the following snippet to create a new message from a lambda (with the good values passed in the environment of the lambda) :
+
+```ts
+const dynamo = new DynamoDB({
+  region: process.env.SCHEDULER_REGION,
+});
+
+dynamo.putItem({
+  TableName: process.env.SCHEDULER_TABLE_NAME,
+  Item: foo, //See last part for the payload format
+});
+```
+
+### Consume messages from the scheduler
+
+Finally to consume the events when the scheduler outputs them you need to consume events from the SQS Queue accessible at `myScheduler.schedulingQueue`.
+For example to trigger some lambda integration you could do :
+
+```ts
+const eventSource = new SqsEventSource(myScheduler.schedulingQueue);
+triggeredEventHandler.addEventSource(eventSource);
+```
+
+### Overview of the architecture
+
+![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](./docs/images/Architecture%20Scheduler.jpg)
+
+## Usage examples with CDK - Typescript
+
+You can check out the full implementations :
+
+1. [Connecting directly the scheduler to an API Gateway](./demo/apiGatewayIntegration/)
+2. [Connecting the Scheduler to a lambda](./demo/lambdaIntegration/)
+
+## Payload format
 
 For the scheduler to function properly the elements added to DynamoDB must have the following attributes:
 
