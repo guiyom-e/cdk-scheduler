@@ -86,7 +86,7 @@ triggeredEventHandler.addEventSource(eventSource);
 
 ### Overview of the architecture
 
-![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](./docs/images/Architecture%20Scheduler.jpg)
+![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](../docs/images/Architecture%20Scheduler.jpg)
 
 ## Payload format
 
