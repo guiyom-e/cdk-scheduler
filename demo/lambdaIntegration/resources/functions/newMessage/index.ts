@@ -1,4 +1,4 @@
-import { DynamoDB } from "@aws-sdk/client-dynamodb";
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 
 //Create a DynamoDB client
 const dynamo = new DynamoDB({
@@ -8,11 +8,16 @@ const dynamo = new DynamoDB({
 //Send message in 20 minutes
 const DEFAULT_DELAY = 20 * 60000;
 
-export const handler = async function (event: any) {
+export const handler = async (event: {
+  queryStringParameters: {
+    message?: string;
+    minutes?: string;
+  };
+}): Promise<unknown> => {
   //Initialize parameters from the queryStringParameters
-  const message = event?.queryStringParameters?.message || "No message found";
+  const message = event.queryStringParameters.message ?? 'No message found';
 
-  let delay = parseInt(event?.queryStringParameters?.minutes) * 60000;
+  let delay = parseInt(event.queryStringParameters.minutes ?? 'NaN') * 60000;
   if (Number.isNaN(delay)) delay = DEFAULT_DELAY;
 
   // Put data into the scheduler using the expected format
@@ -24,9 +29,9 @@ export const handler = async function (event: any) {
   // Note that the `MessageContent` key is not mandatory and any key / value pair
   // can be used here
   const response = await dynamo.putItem({
-    TableName: process.env.SCHEDULER_TABLE_NAME || "TABLE_NOT_FOUND",
+    TableName: process.env.SCHEDULER_TABLE_NAME ?? 'TABLE_NOT_FOUND',
     Item: {
-      pk: { S: process.env.SCHEDULER_PK || "PK_NOT_FOUND" },
+      pk: { S: process.env.SCHEDULER_PK ?? 'PK_NOT_FOUND' },
       sk: { S: `${Date.now() + delay}#${Math.floor(Math.random() * 1000)}` },
       payload: {
         M: {
@@ -38,6 +43,6 @@ export const handler = async function (event: any) {
 
   return {
     statusCode: response.$metadata.httpStatusCode,
-    body: "Completed",
+    body: 'Completed',
   };
 };

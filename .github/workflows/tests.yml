@@ -29,4 +29,7 @@ jobs:
       - name: Run tests on gateway demo 
         working-directory: ./demo/apiGatewayIntegration
         run: yarn test
+      - name: Run tests on lambda demo 
+        working-directory: ./demo/lambdaIntegration
+        run: yarn test
 
