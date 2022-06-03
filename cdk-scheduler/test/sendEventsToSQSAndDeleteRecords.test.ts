@@ -9,16 +9,25 @@ const PK_WITH_SUCCESSFUL_DELETION = 'scheduler';
 const PK_WITH_FAILED_DELETION = 'not-scheduler';
 
 const mockDynamoDb = {
-  deleteItem: ({
-    Key: { pk, sk },
-  }: {
-    Key: { pk: { S: string }; sk: { S: string } };
+  batchWriteItem: async (args: {
+    RequestItems: {
+      [tableName: string]: {
+        DeleteRequest: {
+          Key: { pk: { S: string }; sk: { S: string } };
+        };
+      }[];
+    };
   }) => {
-    if (pk.S === PK_WITH_SUCCESSFUL_DELETION) {
-      return Promise.resolve(`DELETION_SUCCESS-${sk.S}`);
-    }
-
-    return Promise.reject(`DELETION_FAILURE-${sk.S}`);
+    return Promise.resolve({
+      UnprocessedItems: Object.fromEntries(
+        Object.keys(args.RequestItems).map(tableName => [
+          tableName,
+          args.RequestItems[tableName].filter(
+            key => key.DeleteRequest.Key.pk.S === PK_WITH_FAILED_DELETION,
+          ),
+        ]),
+      ),
+    });
   },
 } as unknown as DynamoDB;
 

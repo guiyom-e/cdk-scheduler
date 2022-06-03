@@ -1,4 +1,7 @@
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
+import {
+  BatchWriteItemCommandOutput,
+  DynamoDB,
+} from '@aws-sdk/client-dynamodb';
 import { SQS } from 'aws-sdk';
 
 import {
@@ -16,16 +19,6 @@ interface Config {
   dynamodb: DynamoDB;
   tableName: string;
 }
-
-const isPromiseFulfilled = <T>(
-  settledPromise: PromiseSettledResult<T>,
-): settledPromise is PromiseFulfilledResult<T> =>
-  settledPromise.status === 'fulfilled';
-
-const isPromiseRejected = <T>(
-  settledPromise: PromiseSettledResult<T>,
-): settledPromise is PromiseRejectedResult =>
-  settledPromise.status === 'rejected';
 
 const createSQSMessageFromRecord = (
   record: SchedulerDynamoDBRecord,
@@ -75,24 +68,65 @@ export const sendEventsToSQSAndDeleteRecords = async (
     const successfulIds = successfulMessages.map(
       successfulMessage => successfulMessage.Id,
     );
-    const deletions = await Promise.allSettled(
-      records
-        .filter(record => successfulIds.includes(extractIdForSQS(record)))
-        .map(record =>
-          dynamodb.deleteItem({
-            TableName: tableName,
-            Key: { pk: record.pk, sk: record.sk },
-          }),
+
+    const paginatedRecords: SchedulerDynamoDBRecord[][] = [[]];
+    records
+      .filter(record => successfulIds.includes(extractIdForSQS(record)))
+      .forEach(record => {
+        if (paginatedRecords[paginatedRecords.length - 1].length >= 25)
+          paginatedRecords.push([record]);
+        else paginatedRecords[paginatedRecords.length - 1].push(record);
+      });
+    const paginatedResults = (
+      await Promise.all(
+        paginatedRecords.map(records_subarray =>
+          dynamodb
+            .batchWriteItem({
+              RequestItems: {
+                [tableName]: records_subarray.map(record => {
+                  return {
+                    DeleteRequest: {
+                      Key: { pk: record.pk, sk: record.sk },
+                    },
+                  };
+                }),
+              },
+            })
+            .catch(() => null),
+        ),
+      )
+    ).filter(e => e !== null) as BatchWriteItemCommandOutput[];
+
+    type recordKey = {
+      pk: { S: string };
+      sk: { S: string };
+    };
+
+    const paginatedFailedKeys = paginatedResults.map(result => {
+      if (result.UnprocessedItems?.[tableName] === undefined) return [];
+      else
+        return result.UnprocessedItems[tableName]
+          .filter(request => request.DeleteRequest?.Key !== undefined)
+          .map(request => request.DeleteRequest?.Key as unknown as recordKey);
+    });
+
+    let failedKeys: recordKey[] = [];
+    failedKeys = failedKeys.concat(...paginatedFailedKeys);
+
+    const successKeys = records.filter(
+      record =>
+        !failedKeys.some(
+          element =>
+            element.pk.S === record.pk.S && element.sk.S === record.sk.S,
         ),
     );
 
     failedIds.push(...failedMessages.map(({ Id }) => Id));
     successIdsWithFailedDeletion.push(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-return
-      ...deletions.filter(isPromiseRejected).map(deletion => deletion.reason),
+      ...failedKeys.map(key => `DELETION_FAILURE-${key.sk.S}`),
     );
     successfulIdsWithSuccessfulDeletion.push(
-      ...deletions.filter(isPromiseFulfilled).map(deletion => deletion.value),
+      ...successKeys.map(key => `DELETION_SUCCESS-${key.sk.S}`),
     );
   }
 
