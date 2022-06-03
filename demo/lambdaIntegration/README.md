@@ -5,7 +5,8 @@ This is an example project to demonstrate the usage of the `cdk-scheduler` packa
 ## Installation
 
 - Clone this project locally
-- Install all dependencies by running `yarn install`
+- Install all dependencies by running `yarn install` at the root of the repository
+- Build the package by running `yarn build` in the `cdk-scheduler` subfolder
 - Make sure you have the aws cli installed and configured on your machine
 - Go to this folder bootstrap and deploy the project by typing
   - `npx cdk bootstrap --profile=<profile-name>`
