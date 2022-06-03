@@ -66,7 +66,7 @@ export const sendEventsToSQSAndDeleteRecords = async (
       .promise();
 
     const successfulIds = successfulMessages.map(
-      successfulMessage => successfulMessage.Id,
+      (successfulMessage: { Id: string }) => successfulMessage.Id,
     );
 
     const paginatedRecords: SchedulerDynamoDBRecord[][] = [[]];

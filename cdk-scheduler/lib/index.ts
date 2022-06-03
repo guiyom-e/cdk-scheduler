@@ -16,7 +16,7 @@ import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
 // Must be an integer between 1 and 14 minutes
 export const CRON_DELAY_IN_MINUTES = 14;
 
-export interface LibProps {
+export interface ILibProps {
   /** Whether to disable scheduling in the near future, i.e. within the next `CRON_DELAY_IN_MINUTES` minutes (14 minutes by default).
    * It is not recommended to activate this option, unless no event will be scheduled in the near future.
    *
@@ -52,7 +52,7 @@ export class Scheduler extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    { disableNearFutureScheduling = false }: LibProps = {
+    { disableNearFutureScheduling = false }: ILibProps = {
       disableNearFutureScheduling: false,
     },
   ) {
