@@ -18,9 +18,18 @@ jobs:
         with:
           node-version: 14.18.2
           cache: 'yarn'
-      - run: yarn install
-      - working-directory: ./cdk-scheduler
+      - name: Install all dependencies
+        run: yarn install
+      - name: Run tests on lib
+        working-directory: ./cdk-scheduler
         run: yarn test
-      - working-directory: ./demo/apiGatewayIntegration
+      - name: Build library
+        working-directory: ./cdk-scheduler
+        run: yarn build
+      - name: Run tests on gateway demo 
+        working-directory: ./demo/apiGatewayIntegration
+        run: yarn test
+      - name: Run tests on lambda demo 
+        working-directory: ./demo/lambdaIntegration
         run: yarn test
 

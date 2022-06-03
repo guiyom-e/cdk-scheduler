@@ -5,14 +5,27 @@
     "test-sched": "bin/test-sched.js"
   },
   "scripts": {
-    "cdk": "cdk"
+    "deploy": "cdk deploy",
+    "test-lint": "eslint . --ext js,ts --ignore-path ../../.gitignore",
+    "test-type": "tsc --noEmit",
+    "test": "yarn test-lint && yarn test-type"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",
     "@types/node": "10.17.27",
+    "@typescript-eslint/eslint-plugin": "^5.16.0",
+    "@typescript-eslint/parser": "^5.16.0",
     "aws-cdk": "2.23.0",
-    "cdk-scheduler": "latest",
+    "cdk": "^2.24.1",
+    "cdk-scheduler": "workspace:^",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jest": "^26.1.3",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
+    "prettier": "^2.6.1",
     "ts-jest": "^27.1.4",
     "ts-node": "^10.7.0",
     "typescript": "~3.9.7"
