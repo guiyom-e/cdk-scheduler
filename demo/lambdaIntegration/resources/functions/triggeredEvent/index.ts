@@ -2,7 +2,7 @@ const dateToTimeString = (date: Date) =>
   `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}:${date.getMilliseconds()}`;
 
 export const handler = (event: { Records?: unknown[] }): void => {
-  if (event.Records?.length == null)
+  if (event.Records === undefined || event.Records.length === 0)
     return console.error('The event had no (or empty) `Records` array');
   event.Records.forEach((record: { body?: string }) => {
     try {

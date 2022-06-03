@@ -17,8 +17,10 @@ export const handler = async (event: {
   //Initialize parameters from the queryStringParameters
   const message = event.queryStringParameters.message ?? 'No message found';
 
-  let delay = parseInt(event.queryStringParameters.minutes ?? 'NaN') * 60000;
-  if (Number.isNaN(delay)) delay = DEFAULT_DELAY;
+  const delay =
+    event.queryStringParameters.minutes === undefined
+      ? DEFAULT_DELAY
+      : parseInt(event.queryStringParameters.minutes) * 60000;
 
   // Put data into the scheduler using the expected format
   // `TableName` being the table name provided by the scheduler object
