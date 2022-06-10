@@ -5,6 +5,7 @@
   "license": "MIT",
   "repository": {
     "url": "https://github.com/guiyom-e/cdk-scheduler",
+    "directory": "/cdk-scheduler",
     "type": "git"
   },
   "author": {
