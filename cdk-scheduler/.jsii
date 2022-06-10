@@ -13,8 +13,8 @@
     "lodash": "^4.17.21"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.27.0",
-    "constructs": "^10.1.34"
+    "aws-cdk-lib": "2.27.0",
+    "constructs": "10.1.34"
   },
   "dependencyClosure": {
     "aws-cdk-lib": {
@@ -3034,20 +3034,37 @@
       "pacmak": {
         "hasDefaultInterfaces": true
       }
-    }
+    },
+    "tscRootDir": "lib"
   },
   "name": "cdk-scheduler",
   "readme": {
     "markdown": "# cdk-scheduler\n\n> A CDK construct to schedule events precisely ⏱\n\nThis construct enables to trigger an event at a given time on a serverless architecture.\n\nYou should use cdk-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application.\n\n## Install\n\nTo install with npm:\n\n```\nnpm install cdk-scheduler\n```\n\nTo install with yarn:\n\n```\nyarn add cdk-scheduler\n```\n\n## Usage\n\n### Understand how the Scheduler works\n\n`cdk-scheduler` is powered by SQS feature to delay events up to 15 minutes.\n\nA lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.\n\n### Import and initialize Scheduler\n\nImport the scheduler with :\n\n```ts\nimport { Scheduler } from 'cdk-scheduler';\n```\n\nThen instantiate the scheduler :\n\n```ts\nconst myScheduler = new Scheduler(app, id);\n```\n\n- `app` : Your CDK app (a `Construct`)\n- `id` : The id/name of the scheduler (a `string`)\n\n### Write messages to the scheduler\n\nGrant access to write a new message to the scheduler to the service(s) that will write to it. For example an API Integration or a lambda function :\n\n```ts\nmyScheduler.schedulerTable.grantWriteData(newMessageLambda);\n```\n\nMessages can be posted to the scheduler by inserting a new row into the `myScheduler.schedulerTable` dynamoDB table. Parameters needed are:\n\n- The **name of the table** to insert to : `myScheduler.schedulerTable.tableName`\n- The **partition key** to use in this table : `myScheduler.partitionKeyValue`\n- The **sort key** to use must be like \"`[timestamp]#[id]`\"\n  - _For example : \"`1653052252606#some-random-id`\" to schedule the event the `2022-05-20` at `13:10 UTC`_)\n- The **payload** must be a mapping with any content\n\nAn example to create a new message from a lambda (with the appropriate values passed in the environment of the lambda) :\n\n```ts\nconst dynamo = new DynamoDB({\n  region: process.env.SCHEDULER_REGION,\n});\n\ndynamo.putItem({\n  TableName: process.env.SCHEDULER_TABLE_NAME,\n  Item: foo, //See last part for the payload format\n});\n```\n\n### Consume messages from the scheduler\n\nThe events can be consumed from the SQS Queue accessible at `myScheduler.schedulingQueue`.\nAn example to trigger some lambda integration from the SQS :\n\n```ts\nconst eventSource = new SqsEventSource(myScheduler.schedulingQueue);\ntriggeredEventHandler.addEventSource(eventSource);\n```\n\n### Overview of the architecture\n\n![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](../docs/images/Architecture%20Scheduler.jpg)\n\n## Payload format\n\nFor the scheduler to function properly the elements added to DynamoDB must have the following attributes:\n\n| Attribute | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                  |\n| --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `pk`      | string | The primary key is always the same. Its value is the attribute `partitionKey` available in the construct instance                                                                                                                                                                                                                                                                            |\n| `sk`      | string | The secondary key should start with the timestamp at which you wish to publish the event. You can concatenate with a unique id to be sure you do not have duplicates if you separate them with a `#`. For instance: ✅ `1649434680000#d66727f2-9df7-41b7-b2f8-211eb5581640` is a correct secondary key. ❌ `20220422-16:47:00:00Z00#66727f2-9df7-41b7-b2f8-211eb5581640` will never be read. |\n| `payload` | map    | This is an object, without format contraints. This payload will be sent in the event once it's published. Use this to detail the action you want to execute a the scheduled time                                                                                                                                                                                                             |\n"
   },
   "repository": {
+    "directory": "/cdk-scheduler",
     "type": "git",
     "url": "https://github.com/guiyom-e/cdk-scheduler"
   },
   "schema": "jsii/0.10.0",
   "targets": {
+    "dotnet": {
+      "namespace": "CDK.Scheduler",
+      "packageId": "CDK.Scheduler"
+    },
+    "java": {
+      "maven": {
+        "artifactId": "core",
+        "groupId": "aws.cdk.scheduler"
+      },
+      "package": "aws.cdk.scheduler"
+    },
     "js": {
       "npm": "cdk-scheduler"
+    },
+    "python": {
+      "distName": "cdk-scheduler",
+      "module": "cdk-scheduler"
     }
   },
   "types": {
@@ -3178,5 +3195,5 @@
     }
   },
   "version": "0.1.7",
-  "fingerprint": "q3RQurxk3Eqi2V8M9+vZ+4hxgRPuIsHeg2CnSlGqlwE="
+  "fingerprint": "mv6MJGTfBmi+XZohsNiU4cbDjH+xJReOPD+BZcNfad8="
 }
