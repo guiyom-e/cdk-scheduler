@@ -7179,7 +7179,7 @@ __metadata:
     ts-node: ^10.7.0
     typescript: ~3.9.7
   bin:
-    test-sched: bin/test-sched.js
+    app: bin/app.js
   languageName: unknown
   linkType: soft
 

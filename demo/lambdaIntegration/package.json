@@ -2,7 +2,7 @@
   "name": "lambda-integration",
   "version": "1.0.0",
   "bin": {
-    "test-sched": "bin/test-sched.js"
+    "app": "bin/app.js"
   },
   "scripts": {
     "deploy": "cdk deploy",
