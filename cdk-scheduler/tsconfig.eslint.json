@@ -4,4 +4,5 @@
         "test/**/*.ts",
         "lib/**/*.ts"
       ],
+      "exclude": ["build"]
 }

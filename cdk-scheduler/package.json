@@ -43,7 +43,6 @@
   ],
   "scripts": {
     "build": "jsii",
-    "clean": "rm lib/**/*.js & rm lib/**/*.d.ts",
     "publish": "yarn build && npm publish --access public",
     "watch": "tsc -w",
     "test-type": "tsc --noEmit",

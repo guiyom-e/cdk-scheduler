@@ -12,9 +12,16 @@ import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
+import { existsSync } from 'fs';
 
 // Must be an integer between 1 and 14 minutes
 export const CRON_DELAY_IN_MINUTES = 14;
+
+// Allows to use precompiled function source when it exists
+const tryJSorTS = (filename: string) => {
+  if (existsSync(`${filename}.js`)) return `${filename}.js`;
+  else return `${filename}.ts`;
+};
 
 export interface ILibProps {
   /** Whether to disable scheduling in the near future, i.e. within the next `CRON_DELAY_IN_MINUTES` minutes (14 minutes by default).
@@ -72,7 +79,7 @@ export class Scheduler extends Construct {
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {
-      entry: `${__dirname}/functions/extract/extract.ts`,
+      entry: tryJSorTS(`${__dirname}/functions/extract/extract`),
       events: [],
       retryAttempts: 2,
       environment: {
@@ -86,7 +93,9 @@ export class Scheduler extends Construct {
 
     if (!disableNearFutureScheduling) {
       this.nearFutureHandler = new NodejsFunction(this, 'NearFutureHandler', {
-        entry: `${__dirname}/functions/handleNearFuture/handleNearFuture.ts`,
+        entry: tryJSorTS(
+          `${__dirname}/functions/handleNearFuture/handleNearFuture`,
+        ),
         retryAttempts: 2,
         environment: {
           TABLE_NAME: this.schedulerTable.tableName,
