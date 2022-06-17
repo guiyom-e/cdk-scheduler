@@ -33,9 +33,13 @@ export const handler = async (
         extractDelaySeconds(record, now) <= (CRON_DELAY_IN_MINUTES + 1) * 60,
     ) as unknown[] as SchedulerDynamoDBRecord[];
 
-  return await sendEventsToSQSAndDeleteRecords(recordsToHandle, {
-    queueUrl,
-    tableName,
-    dynamodb,
-  });
+  return await sendEventsToSQSAndDeleteRecords(
+    recordsToHandle,
+    {
+      queueUrl,
+      tableName,
+      dynamodb,
+    },
+    'handleNearFuture',
+  );
 };
