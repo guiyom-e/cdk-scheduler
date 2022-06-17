@@ -4,5 +4,8 @@
         "test/**/*.ts",
         "lib/**/*.ts"
       ],
-      "exclude": ["build"]
+    "exclude": ["build"],
+    "compilerOptions": {
+      "rootDir": "."
+    }
 }
