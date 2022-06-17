@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
-import { TestSchedulerStack } from '../lib/test-scheduler-stack';
+import { TestBenchStack } from '../lib/testBenchStack';
 
 const app = new cdk.App();
-new TestSchedulerStack(app, 'TestSchedulerStack');
+new TestBenchStack(app, 'TestBenchStack');

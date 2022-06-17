@@ -19,7 +19,7 @@ export const handler = (event: { Records?: unknown[] }): void => {
       console.info(`Data associated with event : `, body.payload);
     } catch (error) {
       console.error('The event record could not be parsed correctly');
-      console.error('The full recieved event record is : ', record);
+      console.error('The full received event record is : ', record);
     }
   });
 };

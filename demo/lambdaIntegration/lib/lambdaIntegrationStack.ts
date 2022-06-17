@@ -5,7 +5,7 @@ import { Scheduler } from 'cdk-scheduler';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 
-export class TestSchedulerStack extends Stack {
+export class LambdaIntegrationStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 

@@ -14,7 +14,7 @@ import { Scheduler } from 'cdk-scheduler';
 import { DynamoDBPutItemIntegration } from './DynamoDBPutItemIntegration';
 
 /** Integration of the scheduling library */
-class AppStack extends Stack {
+class ApiGatewayIntegrationStack extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
     const schedulerLib = new Scheduler(this, 'scheduler-lib', {});
@@ -78,4 +78,4 @@ class AppStack extends Stack {
 }
 
 const app = new App();
-new AppStack(app, 'AppStack');
+new ApiGatewayIntegrationStack(app, 'ApiGatewayIntegrationStack');

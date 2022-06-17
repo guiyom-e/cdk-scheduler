@@ -51,5 +51,6 @@ export const handler = async ({
       dynamodb,
       tableName,
     },
+    'extract',
   );
 };

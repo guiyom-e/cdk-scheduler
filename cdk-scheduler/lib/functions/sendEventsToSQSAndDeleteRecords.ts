@@ -27,34 +27,47 @@ const isPromiseRejected = <T>(
 ): settledPromise is PromiseRejectedResult =>
   settledPromise.status === 'rejected';
 
+const createSQSMessageFromRecord = (
+  record: SchedulerDynamoDBRecord,
+  source: string | undefined,
+) => {
+  const now = getNow();
+  const delaySeconds = extractDelaySeconds(record, now);
+
+  return {
+    Id: extractIdForSQS(record),
+    DelaySeconds: delaySeconds,
+    MessageBody: JSON.stringify({
+      publicationTimestamp: extractTimestamp(record),
+      payload: record.payload,
+      _source: source ?? 'unknown',
+      _sentTimeStamp: now,
+      _delaySeconds: delaySeconds,
+    }),
+  };
+};
+
 export const sendEventsToSQSAndDeleteRecords = async (
   records: SchedulerDynamoDBRecord[],
   { queueUrl, dynamodb, tableName }: Config,
+  source?: string,
 ): Promise<{
   failedIds: string[];
   successIdsWithFailedDeletion: unknown[];
   successfulIdsWithSuccessfulDeletion: unknown[];
 }> => {
   const sqs = new SQS();
-  const now = getNow();
-
-  const entries = records.map(record => ({
-    Id: extractIdForSQS(record),
-    DelaySeconds: extractDelaySeconds(record, now),
-    MessageBody: JSON.stringify({
-      publicationTimestamp: extractTimestamp(record),
-      payload: record.payload,
-    }),
-  }));
 
   const failedIds: string[] = [];
   const successIdsWithFailedDeletion: unknown[] = [];
   const successfulIdsWithSuccessfulDeletion: unknown[] = [];
 
-  for (let i = 0; i < entries.length; i += SQS_BATCH_SIZE) {
+  for (let i = 0; i < records.length; i += SQS_BATCH_SIZE) {
     const { Successful: successfulMessages, Failed: failedMessages } = await sqs
       .sendMessageBatch({
-        Entries: entries.slice(i, Math.min(i + SQS_BATCH_SIZE, entries.length)),
+        Entries: records
+          .slice(i, Math.min(i + SQS_BATCH_SIZE, records.length))
+          .map(record => createSQSMessageFromRecord(record, source)),
         QueueUrl: queueUrl,
       })
       .promise();

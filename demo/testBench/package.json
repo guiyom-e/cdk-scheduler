@@ -1,5 +1,5 @@
 {
-  "name": "lambda-integration",
+  "name": "test-bench",
   "version": "1.0.0",
   "bin": {
     "app": "bin/app.js"
