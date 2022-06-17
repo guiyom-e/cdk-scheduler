@@ -3077,7 +3077,7 @@
       "kind": "interface",
       "locationInModule": {
         "filename": "lib/index.ts",
-        "line": 19
+        "line": 26
       },
       "name": "ILibProps",
       "properties": [
@@ -3090,7 +3090,7 @@
           },
           "locationInModule": {
             "filename": "lib/index.ts",
-            "line": 27
+            "line": 34
           },
           "name": "disableNearFutureScheduling",
           "optional": true,
@@ -3114,7 +3114,7 @@
         },
         "locationInModule": {
           "filename": "lib/index.ts",
-          "line": 52
+          "line": 59
         },
         "parameters": [
           {
@@ -3141,7 +3141,7 @@
       "kind": "class",
       "locationInModule": {
         "filename": "lib/index.ts",
-        "line": 30
+        "line": 37
       },
       "name": "Scheduler",
       "properties": [
@@ -3153,7 +3153,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "lib/index.ts",
-            "line": 35
+            "line": 42
           },
           "name": "partitionKeyValue",
           "type": {
@@ -3168,7 +3168,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "lib/index.ts",
-            "line": 32
+            "line": 39
           },
           "name": "schedulerTable",
           "type": {
@@ -3183,7 +3183,7 @@
           "immutable": true,
           "locationInModule": {
             "filename": "lib/index.ts",
-            "line": 38
+            "line": 45
           },
           "name": "schedulingQueue",
           "type": {
@@ -3195,5 +3195,5 @@
     }
   },
   "version": "0.1.7",
-  "fingerprint": "mv6MJGTfBmi+XZohsNiU4cbDjH+xJReOPD+BZcNfad8="
+  "fingerprint": "oqp1lMF2aQxhvBBjbW/AzVmNZPP3JKgTeUnzhcpUtYY="
 }

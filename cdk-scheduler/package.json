@@ -119,6 +119,10 @@
     "tsc": {
       "outDir": "build",
       "rootDir": "lib"
-    }
+    },
+    "typescriptIgnore": [
+      "**/*.d.ts",
+      "**/test/*"
+    ]
   }
 }
