@@ -5,7 +5,13 @@
   "license": "MIT",
   "repository": {
     "url": "https://github.com/guiyom-e/cdk-scheduler",
+    "directory": "/cdk-scheduler",
     "type": "git"
+  },
+  "author": {
+    "name": "Guillaume Égée",
+    "email": "guillaumee@theodo.fr",
+    "organization": "Theodo"
   },
   "keywords": [
     "cdk",
@@ -24,15 +30,19 @@
     },
     {
       "name": "Guillaume Égée"
+    },
+    {
+      "name": "Nathan Perriolat"
     }
   ],
-  "main": "build/lib/index.js",
-  "types": "build/lib/index.d.ts",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
   "files": [
-    "build/lib"
+    "lib/**/*.js",
+    "lib/**/*.d.ts"
   ],
   "scripts": {
-    "build": "tsc && yarn babel build/lib --out-dir build/lib --extensions \".js\"",
+    "build": "jsii",
     "publish": "yarn build && npm publish --access public",
     "watch": "tsc -w",
     "test-type": "tsc --noEmit",
@@ -41,17 +51,14 @@
     "test": "yarn test-lint && yarn test-type && yarn test-unit"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.17.10",
     "@types/jest": "^26.0.10",
-    "@types/lodash": "^4.14.180",
     "@types/node": "10.17.27",
+    "@types/prettier": "2.6.0",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
-    "aws-cdk-lib": "^2.24.1",
-    "babel-plugin-search-and-replace": "^1.1.0",
+    "aws-cdk-lib": "^2.27.0",
     "cdk": "^2.24.1",
-    "constructs": "^10.0.0",
+    "constructs": "^10.1.34",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
@@ -60,17 +67,54 @@
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^26.4.2",
     "jest-esm-transformer": "^1.0.0",
+    "jsii": "^1.59.0",
+    "jsii-pacmak": "^1.59.0",
     "prettier": "^2.6.1",
     "ts-jest": "^26.2.0",
-    "typescript": "~3.9.7"
+    "typescript": "~4.0.0"
   },
   "packageManager": "yarn@3.1.1",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.58.0",
-    "aws-sdk": "^2.1105.0",
-    "lodash": "^4.17.21"
+    "aws-sdk": "^2.1105.0"
   },
+  "peerDependencies": {
+    "aws-cdk-lib": "2.27.0",
+    "constructs": "10.1.34"
+  },
+  "bundledDependencies": [
+    "@aws-sdk/client-dynamodb",
+    "aws-sdk"
+  ],
   "engines": {
     "node": "14.18.2"
+  },
+  "stability": "experimental",
+  "jsii": {
+    "versionFormat": "full",
+    "targets": {
+      "java": {
+        "package": "aws.cdk.scheduler",
+        "maven": {
+          "groupId": "aws.cdk.scheduler",
+          "artifactId": "core"
+        }
+      },
+      "python": {
+        "distName": "cdk-scheduler",
+        "module": "cdk-scheduler"
+      },
+      "dotnet": {
+        "namespace": "CDK.Scheduler",
+        "packageId": "CDK.Scheduler"
+      }
+    },
+    "tsc": {
+      "outDir": "build",
+      "rootDir": "."
+    },
+    "excludeTypescript": [
+      "test/**/*.ts"
+    ]
   }
 }
