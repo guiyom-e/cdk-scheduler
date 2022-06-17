@@ -4,7 +4,7 @@ module.exports = {
   ...sharedConfig,
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.eslint.json',
+      tsconfig: 'tsconfig.test.json',
     },
   },
 };

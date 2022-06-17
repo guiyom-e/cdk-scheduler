@@ -94,7 +94,6 @@
   },
   "stability": "experimental",
   "jsii": {
-    "outdir": "dist",
     "versionFormat": "full",
     "targets": {
       "java": {
@@ -115,11 +114,10 @@
     },
     "tsc": {
       "outDir": "build",
-      "rootDir": "lib"
+      "rootDir": "."
     },
-    "typescriptIgnore": [
-      "**/*.d.ts",
-      "**/test/*"
+    "excludeTypescript": [
+      "test/**/*.ts"
     ]
   }
 }

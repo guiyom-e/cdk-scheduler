@@ -3035,7 +3035,7 @@
         "hasDefaultInterfaces": true
       }
     },
-    "tscRootDir": "lib"
+    "tscRootDir": "."
   },
   "name": "cdk-scheduler",
   "readme": {
@@ -3195,5 +3195,5 @@
     }
   },
   "version": "0.1.7",
-  "fingerprint": "oqp1lMF2aQxhvBBjbW/AzVmNZPP3JKgTeUnzhcpUtYY="
+  "fingerprint": "VX+C/P65YQx2mzseFVfRsu09/aGfeVyoVsKX0vNky0E="
 }
