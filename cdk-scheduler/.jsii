@@ -9,8 +9,7 @@
   },
   "bundled": {
     "@aws-sdk/client-dynamodb": "^3.58.0",
-    "aws-sdk": "^2.1105.0",
-    "lodash": "^4.17.21"
+    "aws-sdk": "^2.1105.0"
   },
   "dependencies": {
     "aws-cdk-lib": "2.27.0",
@@ -3195,5 +3194,5 @@
     }
   },
   "version": "0.1.7",
-  "fingerprint": "VX+C/P65YQx2mzseFVfRsu09/aGfeVyoVsKX0vNky0E="
+  "fingerprint": "qbp7xw4/gqqvjYVpRjcEqP8p92OCurSZbXUWve+8+kI="
 }
