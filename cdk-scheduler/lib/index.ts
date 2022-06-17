@@ -18,7 +18,7 @@ import { existsSync } from 'fs';
 export const CRON_DELAY_IN_MINUTES = 14;
 
 // Allows to use precompiled function source when it exists
-const tryJSorTS = (filename: string) => {
+const findLambdaFilePath = (filename: string) => {
   if (existsSync(`${filename}.js`)) return `${filename}.js`;
   else return `${filename}.ts`;
 };
@@ -79,7 +79,7 @@ export class Scheduler extends Construct {
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {
-      entry: tryJSorTS(`${__dirname}/functions/extract/extract`),
+      entry: findLambdaFilePath(`${__dirname}/functions/extract/extract`),
       events: [],
       retryAttempts: 2,
       environment: {
@@ -93,7 +93,7 @@ export class Scheduler extends Construct {
 
     if (!disableNearFutureScheduling) {
       this.nearFutureHandler = new NodejsFunction(this, 'NearFutureHandler', {
-        entry: tryJSorTS(
+        entry: findLambdaFilePath(
           `${__dirname}/functions/handleNearFuture/handleNearFuture`,
         ),
         retryAttempts: 2,
