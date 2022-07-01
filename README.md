@@ -1,3 +1,5 @@
+![image](https://user-images.githubusercontent.com/46320048/176927746-950cfa05-0ed6-4d8a-8cf6-3334cf9e117e.png)
+
 # CDK construct for serverless scheduling
 
 > `cdk-scheduler`, a CDK construct to schedule events precisely and serverless ⏱
