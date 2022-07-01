@@ -4,7 +4,7 @@
 
 This construct enables to trigger an event at a given time on a serverless architecture.
 
-You should use `cdk-scheduler` if you need to trigger an event at a precise time (down to the second) on your AWS application. If you want to compare options, check out [our article on different serverless scheduling solutions](https://dev.to/kumo/a-serverless-solution-to-just-in-time-scheduling-3cn6)
+You should use `cdk-scheduler` if you need to trigger an event at a precise time (down to the second) on your AWS application. If you want to compare options, check out [our article on different serverless scheduling solutions](https://dev.to/kumo/a-serverless-solution-to-just-in-time-scheduling-3cn6).
 
 # [How to use cdk-scheduler](./cdk-scheduler/README.md)
 
