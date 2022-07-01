@@ -3047,23 +3047,8 @@
   },
   "schema": "jsii/0.10.0",
   "targets": {
-    "dotnet": {
-      "namespace": "CDK.Scheduler",
-      "packageId": "CDK.Scheduler"
-    },
-    "java": {
-      "maven": {
-        "artifactId": "core",
-        "groupId": "aws.cdk.scheduler"
-      },
-      "package": "aws.cdk.scheduler"
-    },
     "js": {
       "npm": "cdk-scheduler"
-    },
-    "python": {
-      "distName": "cdk-scheduler",
-      "module": "cdk-scheduler"
     }
   },
   "types": {
@@ -3193,6 +3178,6 @@
       "symbolId": "lib/index:Scheduler"
     }
   },
-  "version": "0.1.7",
-  "fingerprint": "qbp7xw4/gqqvjYVpRjcEqP8p92OCurSZbXUWve+8+kI="
+  "version": "0.2.2",
+  "fingerprint": "rX6/yaa7dObGtGD7ByzcEs+PuebzheMPCEo8GRAZMs4="
 }
