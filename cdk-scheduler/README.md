@@ -1,10 +1,10 @@
-# cdk-scheduler
+# cdk-scheduler - CDK construct for serverless scheduling
 
-> A CDK construct to schedule events precisely ⏱
+> `cdk-scheduler`, a CDK construct to schedule events precisely and serverless ⏱
 
 This construct enables to trigger an event at a given time on a serverless architecture.
 
-You should use cdk-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application.
+You should use cdk-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application. If you want to compare options, check out [our article on different serverless scheduling solutions](https://dev.to/kumo/a-serverless-solution-to-just-in-time-scheduling-3cn6).
 
 ## Install
 
@@ -86,11 +86,11 @@ triggeredEventHandler.addEventSource(eventSource);
 
 ### Overview of the architecture
 
-![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](../docs/images/Architecture%20Scheduler.jpg)
+![cdk-scheduler architecture diagram: dynamoDB with scheduled event linked to a lambda scheduled every 15 minutes publishes on an SQS with delay](../docs/images/Architecture%20Scheduler.jpg)
 
 ## Payload format
 
-For the scheduler to function properly the elements added to DynamoDB must have the following attributes:
+For cdk-scheduler to function properly the elements added to DynamoDB must have the following attributes:
 
 | Attribute | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                  |
 | --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
