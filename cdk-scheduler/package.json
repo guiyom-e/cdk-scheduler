@@ -1,7 +1,7 @@
 {
   "name": "cdk-scheduler",
   "description": "Precise-to-the-second CDK construct to schedule events",
-  "version": "0.2.0",
+  "version": "0.2.3",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/guiyom-e/cdk-scheduler",
@@ -38,12 +38,12 @@
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
   "files": [
-    "lib/**/*.js",
-    "lib/**/*.d.ts"
+    "build/**/*.js",
+    "build/**/*.d.ts",
+    ".jsii"
   ],
   "scripts": {
     "build": "jsii",
-    "publish": "yarn build && npm publish --access public",
     "watch": "tsc -w",
     "test-type": "tsc --noEmit",
     "test-lint": "eslint . --ext js,ts --ignore-path ../.gitignore",
@@ -87,28 +87,11 @@
     "aws-sdk"
   ],
   "engines": {
-    "node": "14.18.2"
+    "node": ">=14.0.0"
   },
   "stability": "experimental",
   "jsii": {
     "versionFormat": "full",
-    "targets": {
-      "java": {
-        "package": "aws.cdk.scheduler",
-        "maven": {
-          "groupId": "aws.cdk.scheduler",
-          "artifactId": "core"
-        }
-      },
-      "python": {
-        "distName": "cdk-scheduler",
-        "module": "cdk-scheduler"
-      },
-      "dotnet": {
-        "namespace": "CDK.Scheduler",
-        "packageId": "CDK.Scheduler"
-      }
-    },
     "tsc": {
       "outDir": "build",
       "rootDir": "."
