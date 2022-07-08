@@ -21,14 +21,15 @@ export const handler = (event: { Records?: unknown[] }): void => {
     const now = new Date(Date.now());
 
     console.info(
-      `Id: ${body.payload?.M?.TestId?.S ?? 'unknown'} 
-      / UniqueId: ${body.payload?.M?.UniqueId?.S ?? 'unknown'} 
-      / Publication Timestamp: ${publicationTimestamp.toISOString()} 
-      / Now: ${now.toISOString()} 
-      / Diff (ms): ${now.valueOf() - publicationTimestamp.valueOf()} 
-      / source: ${body._source ?? 'unknown'} 
-      / sentTimeStamp: ${body._sentTimeStamp ?? 'unknown'} 
-      / delaySeconds: ${body._delaySeconds ?? 'unknown'}`,
+      `[FOR_DASHBOARD] ` +
+        `/ Id: ${body.payload?.M?.TestId?.S ?? 'unknown'} ` +
+        `/ UniqueId: ${body.payload?.M?.UniqueId?.S ?? 'unknown'} ` +
+        `/ PublicationTimestamp: ${publicationTimestamp.toISOString()} ` +
+        `/ Now: ${now.toISOString()}  ` +
+        `/ DiffMs: ${now.valueOf() - publicationTimestamp.valueOf()} ` +
+        `/ Source: ${body._source ?? 'unknown'} ` +
+        `/ SentTimeStamp: ${body._sentTimeStamp ?? 'unknown'} ` +
+        `/ DelaySeconds: ${body._delaySeconds ?? 'unknown'}`,
       record,
       body.payload,
     );

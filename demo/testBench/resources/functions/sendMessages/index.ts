@@ -30,6 +30,8 @@ const skToRequest = (pk: string, sk: string, now: number, testId: string) =>
 const dateToRequest = (pk: string, date: number, now: number, testId: string) =>
   skToRequest(pk, `${date}#EACH_MINUTE-${date - now}#${testId}`, now, testId);
 
+const getRandomId = () => Math.floor(Math.random() * 1000000000).toString();
+
 interface HandlerInput {
   eventSetIndices: number[];
 }
@@ -47,7 +49,7 @@ export const handler = async ({
   const partitionKey = process.env.SCHEDULER_PK;
 
   const now = Date.now();
-  const testId = Math.floor(Math.random() * 1000000000).toString();
+  const testId = getRandomId();
 
   const everySecondAndMoreRequests: WriteRequest[] = [
     now,
@@ -67,29 +69,39 @@ export const handler = async ({
     now + 8000,
     now + 9000,
     now + 10000,
-  ].map(delay => dateToRequest(partitionKey, delay, now, testId));
+  ].map(delay =>
+    dateToRequest(partitionKey, delay, now, testId + '#' + getRandomId()),
+  );
 
   const everyMinuteRequests: WriteRequest[] = Array.from(
     { length: 25 },
     (_, i) => i + 1,
   )
     .map(delay => now + delay * 60 * 1000)
-    .map(delay => dateToRequest(partitionKey, delay, now, testId));
+    .map(delay =>
+      dateToRequest(partitionKey, delay, now, testId + '#' + getRandomId()),
+    );
 
   const everyMinuteLongTermRequests: WriteRequest[] = Array.from(
     { length: 25 },
     (_, i) => i + 1,
   )
     .map(delay => now + (25 + delay) * 60 * 1000)
-    .map(delay => dateToRequest(partitionKey, delay, now, testId));
+    .map(delay =>
+      dateToRequest(partitionKey, delay, now, testId + '#' + getRandomId()),
+    );
 
   const nearFutureBatch = Array.from({ length: 25 }, (_, i) => i)
     .map(i => `${now + 5 * 60 * 1000}#${i}#${testId}`)
-    .map(sk => skToRequest(partitionKey, sk, now, testId));
+    .map(sk =>
+      skToRequest(partitionKey, sk, now, testId + '#' + getRandomId()),
+    );
 
   const batchIn15Minutes = Array.from({ length: 25 }, (_, i) => i)
     .map(i => `${now + 15 * 60 * 1000}#${i}#${testId}`)
-    .map(sk => skToRequest(partitionKey, sk, now, testId));
+    .map(sk =>
+      skToRequest(partitionKey, sk, now, testId + '#' + getRandomId()),
+    );
 
   const eventRequests = [
     everySecondAndMoreRequests,
