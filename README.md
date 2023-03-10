@@ -1,5 +1,6 @@
 ![image](https://user-images.githubusercontent.com/46320048/176927746-950cfa05-0ed6-4d8a-8cf6-3334cf9e117e.png)
 
+> 💡 AWS EventBridge has now a built-in scheduler (precise-to-the-minute): https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduler.html. It is preferable to use it if it fit your needs!
 # CDK construct for serverless scheduling
 
 > `cdk-scheduler`, a CDK construct to schedule events precisely and serverless ⏱
@@ -34,8 +35,8 @@ For cdk-scheduler to function properly the elements added to DynamoDB must have 
 | Attribute | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                  |
 | --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `pk`      | string | The primary key is always the same. Its value is the attribute `partitionKey` available in the construct instance                                                                                                                                                                                                                                                                            |
-| `sk`      | string | The secondary key should start with the timestamp at which you wish to publish the event. You can concatenate with a unique id to be sure you do not have duplicates if you separate them with a `#`. For instance: ✅ `1649434680000#d66727f2-9df7-41b7-b2f8-211eb5581640` is a correct secondary key. ❌ `20220422-16:47:00:00Z00#66727f2-9df7-41b7-b2f8-211eb5581640` will never be read. |
-| `payload` | map    | This is an object, without format contraints. This payload will be sent in the event once it's published. Use this to detail the action you want to execute a the scheduled time                                                                                                                                                                                                             |
+| `sk`      | string | The secondary key should start with the timestamp (13-digit millisecond format) at which you wish to publish the event. You can concatenate with a unique id to be sure you do not have duplicates if you separate them with a `#`. For instance: ✅ `1649434680000#d66727f2-9df7-41b7-b2f8-211eb5581640` is a correct secondary key. ❌ `20220422-16:47:00:00Z00#66727f2-9df7-41b7-b2f8-211eb5581640` will never be read. |
+| `payload` | map    | This is an object, without format constraints. This payload will be sent in the event once it's published. Use this to detail the action you want to execute a the scheduled time                                                                                                                                                                                                             |
 
 # CONTRIBUTING
 
