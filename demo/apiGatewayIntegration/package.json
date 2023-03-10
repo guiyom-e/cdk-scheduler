@@ -8,14 +8,14 @@
     "test": "yarn test-lint && yarn test-type"
   },
   "dependencies": {
-    "aws-cdk-lib": "^2.24.1",
+    "aws-cdk-lib": "^2.68.0",
     "cdk-scheduler": "workspace:^",
     "constructs": "^10.1.6"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
-    "cdk": "^2.24.1",
+    "cdk": "^2.68.0",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",

@@ -12,10 +12,88 @@
     "aws-sdk": "^2.1105.0"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.27.0",
-    "constructs": "10.1.34"
+    "aws-cdk-lib": "^2.68.0",
+    "constructs": "^10.1.34"
   },
   "dependencyClosure": {
+    "@aws-cdk/asset-awscli-v1": {
+      "targets": {
+        "dotnet": {
+          "namespace": "Amazon.CDK.Asset.AwsCliV1",
+          "packageId": "Amazon.CDK.Asset.AwsCliV1"
+        },
+        "go": {
+          "moduleName": "github.com/cdklabs/awscdk-asset-awscli-go",
+          "packageName": "awscliv1"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "cdk-asset-awscli-v1",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.cdk.asset.awscli.v1"
+        },
+        "js": {
+          "npm": "@aws-cdk/asset-awscli-v1"
+        },
+        "python": {
+          "distName": "aws-cdk.asset-awscli-v1",
+          "module": "aws_cdk.asset_awscli_v1"
+        }
+      }
+    },
+    "@aws-cdk/asset-kubectl-v20": {
+      "targets": {
+        "dotnet": {
+          "namespace": "Amazon.CDK.Asset.KubectlV20",
+          "packageId": "Amazon.CDK.Asset.KubectlV20"
+        },
+        "go": {
+          "moduleName": "github.com/cdklabs/awscdk-asset-kubectl-go",
+          "packageName": "kubectlv20"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "cdk-asset-kubectl-v20",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.cdk.asset.kubectl.v20"
+        },
+        "js": {
+          "npm": "@aws-cdk/asset-kubectl-v20"
+        },
+        "python": {
+          "distName": "aws-cdk.asset-kubectl-v20",
+          "module": "aws_cdk.asset_kubectl_v20"
+        }
+      }
+    },
+    "@aws-cdk/asset-node-proxy-agent-v5": {
+      "targets": {
+        "dotnet": {
+          "namespace": "Amazon.CDK.Asset.NodeProxyAgentV5",
+          "packageId": "Amazon.CDK.Asset.NodeProxyAgentV5"
+        },
+        "go": {
+          "moduleName": "github.com/cdklabs/awscdk-asset-node-proxy-agent-go",
+          "packageName": "nodeproxyagentv5"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "cdk-asset-node-proxy-agent-v5",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.cdk.asset.node.proxy.agent.v5"
+        },
+        "js": {
+          "npm": "@aws-cdk/asset-node-proxy-agent-v5"
+        },
+        "python": {
+          "distName": "aws-cdk.asset-node-proxy-agent-v5",
+          "module": "aws_cdk.asset_node_proxy_agent_v5"
+        }
+      }
+    },
     "aws-cdk-lib": {
       "submodules": {
         "aws-cdk-lib.alexa_ask": {
@@ -734,6 +812,32 @@
             }
           }
         },
+        "aws-cdk-lib.aws_connectcampaigns": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.ConnectCampaigns"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.connectcampaigns"
+            },
+            "python": {
+              "module": "aws_cdk.aws_connectcampaigns"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_controltower": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.ControlTower"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.controltower"
+            },
+            "python": {
+              "module": "aws_cdk.aws_controltower"
+            }
+          }
+        },
         "aws-cdk-lib.aws_cur": {
           "targets": {
             "dotnet": {
@@ -825,6 +929,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_devicefarm": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.DeviceFarm"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.devicefarm"
+            },
+            "python": {
+              "module": "aws_cdk.aws_devicefarm"
+            }
+          }
+        },
         "aws-cdk-lib.aws_devopsguru": {
           "targets": {
             "dotnet": {
@@ -887,6 +1004,19 @@
             },
             "python": {
               "module": "aws_cdk.aws_docdb"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_docdbelastic": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.DocDBElastic"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.docdbelastic"
+            },
+            "python": {
+              "module": "aws_cdk.aws_docdbelastic"
             }
           }
         },
@@ -1306,6 +1436,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_grafana": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.Grafana"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.grafana"
+            },
+            "python": {
+              "module": "aws_cdk.aws_grafana"
+            }
+          }
+        },
         "aws-cdk-lib.aws_greengrass": {
           "targets": {
             "dotnet": {
@@ -1381,6 +1524,19 @@
             },
             "python": {
               "module": "aws_cdk.aws_iam"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_identitystore": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.IdentityStore"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.identitystore"
+            },
+            "python": {
+              "module": "aws_cdk.aws_identitystore"
             }
           }
         },
@@ -1501,6 +1657,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_iotfleetwise": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.IoTFleetWise"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.iotfleetwise"
+            },
+            "python": {
+              "module": "aws_cdk.aws_iotfleetwise"
+            }
+          }
+        },
         "aws-cdk-lib.aws_iotsitewise": {
           "targets": {
             "dotnet": {
@@ -1589,6 +1758,19 @@
             },
             "python": {
               "module": "aws_cdk.aws_kendra"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_kendraranking": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.KendraRanking"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.kendraranking"
+            },
+            "python": {
+              "module": "aws_cdk.aws_kendraranking"
             }
           }
         },
@@ -1852,6 +2034,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_m2": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.M2"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.m2"
+            },
+            "python": {
+              "module": "aws_cdk.aws_m2"
+            }
+          }
+        },
         "aws-cdk-lib.aws_macie": {
           "targets": {
             "dotnet": {
@@ -2047,6 +2242,45 @@
             }
           }
         },
+        "aws-cdk-lib.aws_oam": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.Oam"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.oam"
+            },
+            "python": {
+              "module": "aws_cdk.aws_oam"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_omics": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.Omics"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.omics"
+            },
+            "python": {
+              "module": "aws_cdk.aws_omics"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_opensearchserverless": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.OpenSearchServerless"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.opensearchserverless"
+            },
+            "python": {
+              "module": "aws_cdk.aws_opensearchserverless"
+            }
+          }
+        },
         "aws-cdk-lib.aws_opensearchservice": {
           "targets": {
             "dotnet": {
@@ -2083,6 +2317,19 @@
             },
             "python": {
               "module": "aws_cdk.aws_opsworkscm"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_organizations": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.Organizations"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.organizations"
+            },
+            "python": {
+              "module": "aws_cdk.aws_organizations"
             }
           }
         },
@@ -2135,6 +2382,19 @@
             },
             "python": {
               "module": "aws_cdk.aws_pinpointemail"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_pipes": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.Pipes"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.pipes"
+            },
+            "python": {
+              "module": "aws_cdk.aws_pipes"
             }
           }
         },
@@ -2203,6 +2463,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_redshiftserverless": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.RedshiftServerless"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.redshiftserverless"
+            },
+            "python": {
+              "module": "aws_cdk.aws_redshiftserverless"
+            }
+          }
+        },
         "aws-cdk-lib.aws_refactorspaces": {
           "targets": {
             "dotnet": {
@@ -2242,6 +2515,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_resourceexplorer2": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.ResourceExplorer2"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.resourceexplorer2"
+            },
+            "python": {
+              "module": "aws_cdk.aws_resourceexplorer2"
+            }
+          }
+        },
         "aws-cdk-lib.aws_resourcegroups": {
           "targets": {
             "dotnet": {
@@ -2265,6 +2551,19 @@
             },
             "python": {
               "module": "aws_cdk.aws_robomaker"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_rolesanywhere": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.RolesAnywhere"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.rolesanywhere"
+            },
+            "python": {
+              "module": "aws_cdk.aws_rolesanywhere"
             }
           }
         },
@@ -2463,6 +2762,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_scheduler": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.Scheduler"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.scheduler"
+            },
+            "python": {
+              "module": "aws_cdk.aws_scheduler"
+            }
+          }
+        },
         "aws-cdk-lib.aws_sdb": {
           "targets": {
             "dotnet": {
@@ -2580,6 +2892,19 @@
             }
           }
         },
+        "aws-cdk-lib.aws_simspaceweaver": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.SimSpaceWeaver"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.simspaceweaver"
+            },
+            "python": {
+              "module": "aws_cdk.aws_simspaceweaver"
+            }
+          }
+        },
         "aws-cdk-lib.aws_sns": {
           "targets": {
             "dotnet": {
@@ -2694,6 +3019,19 @@
             },
             "python": {
               "module": "aws_cdk.aws_stepfunctions_tasks"
+            }
+          }
+        },
+        "aws-cdk-lib.aws_supportapp": {
+          "targets": {
+            "dotnet": {
+              "namespace": "Amazon.CDK.AWS.SupportApp"
+            },
+            "java": {
+              "package": "software.amazon.awscdk.services.supportapp"
+            },
+            "python": {
+              "module": "aws_cdk.aws_supportapp"
             }
           }
         },
@@ -3015,7 +3353,7 @@
     "stability": "experimental"
   },
   "homepage": "https://github.com/guiyom-e/cdk-scheduler",
-  "jsiiVersion": "1.60.1 (build 2799dc8)",
+  "jsiiVersion": "1.77.0 (build 3e5fa88)",
   "keywords": [
     "cdk",
     "aws",
@@ -3038,7 +3376,7 @@
   },
   "name": "cdk-scheduler",
   "readme": {
-    "markdown": "# cdk-scheduler\n\n> A CDK construct to schedule events precisely ⏱\n\nThis construct enables to trigger an event at a given time on a serverless architecture.\n\nYou should use cdk-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application.\n\n## Install\n\nTo install with npm:\n\n```\nnpm install cdk-scheduler\n```\n\nTo install with yarn:\n\n```\nyarn add cdk-scheduler\n```\n\n## Usage\n\n### Understand how the Scheduler works\n\n`cdk-scheduler` is powered by SQS feature to delay events up to 15 minutes.\n\nA lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.\n\n### Import and initialize Scheduler\n\nImport the scheduler with :\n\n```ts\nimport { Scheduler } from 'cdk-scheduler';\n```\n\nThen instantiate the scheduler :\n\n```ts\nconst myScheduler = new Scheduler(app, id);\n```\n\n- `app` : Your CDK app (a `Construct`)\n- `id` : The id/name of the scheduler (a `string`)\n\n### Write messages to the scheduler\n\nGrant access to write a new message to the scheduler to the service(s) that will write to it. For example an API Integration or a lambda function :\n\n```ts\nmyScheduler.schedulerTable.grantWriteData(newMessageLambda);\n```\n\nMessages can be posted to the scheduler by inserting a new row into the `myScheduler.schedulerTable` dynamoDB table. Parameters needed are:\n\n- The **name of the table** to insert to : `myScheduler.schedulerTable.tableName`\n- The **partition key** to use in this table : `myScheduler.partitionKeyValue`\n- The **sort key** to use must be like \"`[timestamp]#[id]`\"\n  - _For example : \"`1653052252606#some-random-id`\" to schedule the event the `2022-05-20` at `13:10 UTC`_)\n- The **payload** must be a mapping with any content\n\nAn example to create a new message from a lambda (with the appropriate values passed in the environment of the lambda) :\n\n```ts\nconst dynamo = new DynamoDB({\n  region: process.env.SCHEDULER_REGION,\n});\n\ndynamo.putItem({\n  TableName: process.env.SCHEDULER_TABLE_NAME,\n  Item: foo, //See last part for the payload format\n});\n```\n\n### Consume messages from the scheduler\n\nThe events can be consumed from the SQS Queue accessible at `myScheduler.schedulingQueue`.\nAn example to trigger some lambda integration from the SQS :\n\n```ts\nconst eventSource = new SqsEventSource(myScheduler.schedulingQueue);\ntriggeredEventHandler.addEventSource(eventSource);\n```\n\n### Overview of the architecture\n\n![architecture: dynamoDB with scheduled event / lambda scheduled every 15 minutes / publishes to SQS with delay](../docs/images/Architecture%20Scheduler.jpg)\n\n## Payload format\n\nFor the scheduler to function properly the elements added to DynamoDB must have the following attributes:\n\n| Attribute | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                  |\n| --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `pk`      | string | The primary key is always the same. Its value is the attribute `partitionKey` available in the construct instance                                                                                                                                                                                                                                                                            |\n| `sk`      | string | The secondary key should start with the timestamp at which you wish to publish the event. You can concatenate with a unique id to be sure you do not have duplicates if you separate them with a `#`. For instance: ✅ `1649434680000#d66727f2-9df7-41b7-b2f8-211eb5581640` is a correct secondary key. ❌ `20220422-16:47:00:00Z00#66727f2-9df7-41b7-b2f8-211eb5581640` will never be read. |\n| `payload` | map    | This is an object, without format contraints. This payload will be sent in the event once it's published. Use this to detail the action you want to execute a the scheduled time                                                                                                                                                                                                             |\n"
+    "markdown": "![logo](https://user-images.githubusercontent.com/46320048/176927746-950cfa05-0ed6-4d8a-8cf6-3334cf9e117e.png)\n\n> 💡 AWS EventBridge has now a built-in scheduler (precise-to-the-minute): https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduler.html. It is preferable to use it if it fit your needs!\n\n# cdk-scheduler - CDK construct for serverless scheduling\n\n> `cdk-scheduler`, a CDK construct to schedule events precisely and serverless ⏱\n\nThis construct enables to trigger an event at a given time on a serverless architecture.\n\nYou should use cdk-scheduler if you need to trigger an event at a precise time (down to the second) on your AWS application. If you want to compare options, check out [our article on different serverless scheduling solutions](https://dev.to/kumo/a-serverless-solution-to-just-in-time-scheduling-3cn6).\n\n## Install\n\nTo install with npm:\n\n```\nnpm install cdk-scheduler\n```\n\nTo install with yarn:\n\n```\nyarn add cdk-scheduler\n```\n\n## Usage\n\n### Understand how the Scheduler works\n\n`cdk-scheduler` is powered by SQS feature to delay events up to 15 minutes.\n\nA lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.\n\n### Import and initialize Scheduler\n\nImport the scheduler with :\n\n```ts\nimport { Scheduler } from 'cdk-scheduler';\n```\n\nThen instantiate the scheduler :\n\n```ts\nconst myScheduler = new Scheduler(app, id);\n```\n\n- `app` : Your CDK app (a `Construct`)\n- `id` : The id/name of the scheduler (a `string`)\n\n### Write messages to the scheduler\n\nGrant access to write a new message to the scheduler to the service(s) that will write to it. For example an API Integration or a lambda function :\n\n```ts\nmyScheduler.schedulerTable.grantWriteData(newMessageLambda);\n```\n\nMessages can be posted to the scheduler by inserting a new row into the `myScheduler.schedulerTable` dynamoDB table. Parameters needed are:\n\n- The **name of the table** to insert to : `myScheduler.schedulerTable.tableName`\n- The **partition key** to use in this table : `myScheduler.partitionKeyValue`\n- The **sort key** to use must be like \"`[timestamp]#[id]`\"\n  - _For example : \"`1653052252606#some-random-id`\" to schedule the event the `2022-05-20` at `13:10 UTC`_)\n- The **payload** must be a mapping with any content\n\nAn example to create a new message from a lambda (with the appropriate values passed in the environment of the lambda) :\n\n```ts\nconst dynamo = new DynamoDB({\n  region: process.env.SCHEDULER_REGION,\n});\n\ndynamo.putItem({\n  TableName: process.env.SCHEDULER_TABLE_NAME,\n  Item: foo, //See last part for the payload format\n});\n```\n\n### Consume messages from the scheduler\n\nThe events can be consumed from the SQS Queue accessible at `myScheduler.schedulingQueue`.\nAn example to trigger some lambda integration from the SQS :\n\n```ts\nconst eventSource = new SqsEventSource(myScheduler.schedulingQueue);\ntriggeredEventHandler.addEventSource(eventSource);\n```\n\n### Overview of the architecture\n\n![cdk-scheduler architecture diagram: dynamoDB with scheduled event linked to a lambda scheduled every 15 minutes publishes on an SQS with delay](../docs/images/Architecture%20Scheduler.jpg)\n\n## Payload format\n\nFor cdk-scheduler to function properly the elements added to DynamoDB must have the following attributes:\n\n| Attribute | Type   | Description                                                                                                                                                                                                                                                                                                                                                                                  |\n| --------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| `pk`      | string | The primary key is always the same. Its value is the attribute `partitionKey` available in the construct instance                                                                                                                                                                                                                                                                            |\n| `sk`      | string | The secondary key should start with the timestamp (13-digit millisecond format) at which you wish to publish the event. You can concatenate with a unique id to be sure you do not have duplicates if you separate them with a `#`. For instance: ✅ `1649434680000#d66727f2-9df7-41b7-b2f8-211eb5581640` is a correct secondary key. ❌ `20220422-16:47:00:00Z00#66727f2-9df7-41b7-b2f8-211eb5581640` will never be read. |\n| `payload` | map    | This is an object, without format constraints. This payload will be sent in the event once it's published. Use this to detail the action you want to execute a the scheduled time                                                                                                                                                                                                             |\n"
   },
   "repository": {
     "directory": "/cdk-scheduler",
@@ -3178,6 +3516,6 @@
       "symbolId": "lib/index:Scheduler"
     }
   },
-  "version": "0.2.2",
-  "fingerprint": "rX6/yaa7dObGtGD7ByzcEs+PuebzheMPCEo8GRAZMs4="
+  "version": "0.2.3",
+  "fingerprint": "Sc0GHesD1fdCs660u5+K6Yj+x6BYF6GVR20KwQdZ87U="
 }
