@@ -11,7 +11,7 @@ import {
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { DynamoEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
-import { StartingPosition } from 'aws-cdk-lib/aws-lambda';
+import { Runtime, StartingPosition } from 'aws-cdk-lib/aws-lambda';
 import { existsSync } from 'fs';
 
 // Must be an integer between 1 and 14 minutes
@@ -79,6 +79,7 @@ export class Scheduler extends Construct {
     });
 
     this.extractHandler = new NodejsFunction(this, 'ExtractHandler', {
+      runtime: Runtime.NODEJS_16_X,
       entry: findLambdaFilePath(`${__dirname}/functions/extract/extract`),
       events: [],
       retryAttempts: 2,
@@ -93,6 +94,7 @@ export class Scheduler extends Construct {
 
     if (!disableNearFutureScheduling) {
       this.nearFutureHandler = new NodejsFunction(this, 'NearFutureHandler', {
+        runtime: Runtime.NODEJS_16_X,
         entry: findLambdaFilePath(
           `${__dirname}/functions/handleNearFuture/handleNearFuture`,
         ),

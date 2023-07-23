@@ -111,7 +111,7 @@ test.each`
 
     template.hasResourceProperties('AWS::Lambda::Function', {
       Handler: 'index.handler',
-      Runtime: 'nodejs14.x',
+      Runtime: 'nodejs16.x',
     });
 
     expect(CRON_DELAY_IN_MINUTES).toBeGreaterThan(0);

@@ -4,6 +4,7 @@ import { Construct } from 'constructs';
 import { Scheduler } from 'cdk-scheduler';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 export class LambdaIntegrationStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -14,6 +15,7 @@ export class LambdaIntegrationStack extends Stack {
 
     // Defines the lambda function that handles API Events to append new events into the Scheduler
     const newMessageHandler = new NodejsFunction(this, 'NewMessageLambda', {
+      runtime: Runtime.NODEJS_16_X,
       entry: `${__dirname}/../resources/functions/newMessage/index.ts`,
       environment: {
         SCHEDULER_PK: myScheduler.partitionKeyValue,
@@ -44,6 +46,7 @@ export class LambdaIntegrationStack extends Stack {
       this,
       'TriggeredEventLambda',
       {
+        runtime: Runtime.NODEJS_16_X,
         entry: `${__dirname}/../resources/functions/triggeredEvent/index.ts`,
         environment: {
           SCHEDULER_PK: myScheduler.partitionKeyValue,

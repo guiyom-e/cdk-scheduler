@@ -4,6 +4,7 @@ import { Scheduler } from 'cdk-scheduler';
 import { SqsEventSource } from 'aws-cdk-lib/aws-lambda-event-sources';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { aws_cloudwatch as cloudwatch } from 'aws-cdk-lib';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
 
 export class TestBenchStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -12,6 +13,7 @@ export class TestBenchStack extends Stack {
     const scheduler = new Scheduler(this, 'TestBenchScheduler');
 
     const sendMessagesHandler = new NodejsFunction(this, 'SendMessagesLambda', {
+      runtime: Runtime.NODEJS_16_X,
       entry: `${__dirname}/../resources/functions/sendMessages/index.ts`,
       environment: {
         SCHEDULER_PK: scheduler.partitionKeyValue,
@@ -32,6 +34,7 @@ export class TestBenchStack extends Stack {
       this,
       'ReceiveEventsLambda',
       {
+        runtime: Runtime.NODEJS_16_X,
         entry: `${__dirname}/../resources/functions/receiveEvents/index.ts`,
         environment: {
           SCHEDULER_PK: scheduler.partitionKeyValue,

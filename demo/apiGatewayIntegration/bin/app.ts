@@ -70,7 +70,7 @@ class ApiGatewayIntegrationStack extends Stack {
       code: Code.fromInline(
         'exports.main=(event)=>console.log(`Scheduled event received at ${new Date().toISOString()}:`,event);',
       ),
-      runtime: Runtime.NODEJS_14_X,
+      runtime: Runtime.NODEJS_16_X,
     });
     const eventSource = new SqsEventSource(schedulerLib.schedulingQueue);
     triggeredLambda.addEventSource(eventSource);
