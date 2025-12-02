@@ -29,6 +29,9 @@ yarn add cdk-scheduler
 
 A lambda is scheduled to query a DynamoDB Table every 15 minutes, it pushes every events scheduled in the next 15 minutes to SQS with a delay corresponding the desired publication date.
 
+#### Pausing the cron rule / missed events
+If the EventBridge rule is disabled, the `extract` Lambda stops querying DynamoDB and only resumes with items whose `sk` timestamp is between “now” and `now + (cronDelay + 1) minutes` when it is re-enabled; any records already in the past are skipped and stay in the table. The DynamoDB stream “near future” handler still forwards inserts that are due within ~15 minutes of the current time, but items scheduled further out require the cron run—if it is paused through their due time they remain in DynamoDB until you requeue/update them (no TTL is set).
+
 ### Import and initialize Scheduler
 
 Import the scheduler with :
