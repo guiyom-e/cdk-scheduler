@@ -96,6 +96,7 @@ export class Scheduler extends Construct {
         entry: findLambdaFilePath(
           `${__dirname}/functions/handleNearFuture/handleNearFuture`,
         ),
+        memorySize: 256,
         retryAttempts: 2,
         environment: {
           TABLE_NAME: this.schedulerTable.tableName,
