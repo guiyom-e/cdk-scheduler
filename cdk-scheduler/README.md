@@ -89,6 +89,29 @@ triggeredEventHandler.addEventSource(eventSource);
 
 ![cdk-scheduler architecture diagram: dynamoDB with scheduled event linked to a lambda scheduled every 15 minutes publishes on an SQS with delay](../docs/images/Architecture%20Scheduler.jpg)
 
+## One-off purge of stale DynamoDB items
+
+If the EventBridge rule was paused or items are otherwise stuck with an `sk` timestamp in the past, you can clean them up with the provided script:
+
+```
+# Dry run (no deletes), uses now() as the cutoff
+TABLE_NAME=<your-table-name> DRY_RUN=true node scripts/purge-stale-records.js
+
+# Delete everything before "now" for pk=scheduler
+TABLE_NAME=<your-table-name> PARTITION_KEY_VALUE=scheduler BEFORE_TIMESTAMP_MS=$(node -e "console.log(Date.now())") node scripts/purge-stale-records.js
+```
+
+What it does:
+- Queries by partition key and removes items whose `sk` is strictly less than `BEFORE_TIMESTAMP_MS`.
+- Batches deletes in 25-item chunks with simple retries.
+- Respects `DRY_RUN=true` to preview counts without deleting.
+
+Environment variables:
+- `TABLE_NAME` (required): DynamoDB table name (the scheduler table).
+- `PARTITION_KEY_VALUE` (optional): Defaults to `scheduler`.
+- `BEFORE_TIMESTAMP_MS` (optional): Unix time in milliseconds; defaults to the moment the script runs.
+- `DRY_RUN` (optional): Set to `true` to only list/delete counts without issuing deletes.
+
 ## Payload format
 
 For cdk-scheduler to function properly the elements added to DynamoDB must have the following attributes:
